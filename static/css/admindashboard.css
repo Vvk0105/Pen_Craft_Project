@@ -44,7 +44,7 @@ color: #00A3FF;
     
 
     #dashboard {
-        height: 100vh; /* Set the section height to 100% of the viewport height */
+        /* height: 100vh; Set the section height to 100% of the viewport height */
         display: flex; /* Use flexbox for layout */
     }
     
@@ -303,7 +303,7 @@ box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
 .chat-display > div {
     border: 1px solid #6f6969;
-    min-height: 700px;
+    min-height: 100%;
     border-radius: 10px;
     padding: 10px 20px;
     position: relative;
@@ -311,8 +311,8 @@ box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
 
 .chat-box {
-    position: absolute;
-    width: 100%;
+    position: fixed;
+    width: 160vh;
     bottom: 0;
 }
 

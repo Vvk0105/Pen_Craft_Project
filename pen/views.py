@@ -290,22 +290,31 @@ def coReg(request):
         password1 = request.POST['password1']
         qual = request.POST['qual']
         field = request.POST['field']
+        description = request.POST['description']
         img = request.FILES.get('img')  
+        
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists. Please choose a different username.")
+            return redirect('coReg')
 
         if password != password1:
             messages.error(request, "Your password and confirm password do not match!")
             return redirect('coReg')  
+        
+        # Validate phone number
+        if len(phone) != 10:
+            messages.error(request, "Phone number must be exactly 10 digits.")
+            return render('coReg')
 
         if not img:
             messages.error(request, 'Image is required. Please select an image to upload.')
             return redirect('coReg')
 
-        
         usr = User.objects.create_user(
             username=username, password=password, is_active=False, is_staff=True)
         usr.save()
         tut = Master.objects.create(username=username, email=email, phone=phone, address=address,
-                              qual=qual, field=field, img=img, user=usr)
+                              qual=qual, field=field, img=img, user=usr, description = description)
         tut.save()
         messages.success(request, 'Registration Successful. Please wait for admin approval.')
         return redirect('login')

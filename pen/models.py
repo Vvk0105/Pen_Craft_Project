@@ -27,7 +27,13 @@ class Master(models.Model):
     field = models.CharField(max_length=100, default='Default Value')
     img = models.ImageField(upload_to='Profile')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(default=timezone.now)  
+    created_at = models.DateTimeField(default=timezone.now)
+    description = models.TextField(default='Not Provided')
+
+    def delete(self, *args, **kwargs):
+        user = self.user
+        super().delete(*args, **kwargs)
+        user.delete()
 
     def __str__(self):
         return self.user.username
@@ -74,6 +80,13 @@ class FeedbackDetails(models.Model):
 
     def __str__(self):
         return self.submission.title
+    
+    def reviewed_by_user(self):
+        try:
+            user = User.objects.get(username=self.reviewed_by)
+            return user
+        except User.DoesNotExist:
+            return None
     
 
 class Complaint(models.Model):

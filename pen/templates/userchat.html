@@ -7,15 +7,30 @@
     <link rel="stylesheet" href="{% static 'css/admindashboard.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-
 </head>
+<style>
+    body {
+        overflow: hidden;
+    }
+    .chat-display {
+        height: 78vh; /* Adjust the height as needed */
+        overflow-y: auto;
+    }
+    .chat-hold {
+        height: 100%;
+        overflow-y: auto;
+    }
+</style>
 <body>
     <nav id='common-home-navbar' class="navbar bg-body-tertiary">
         <div class="container-fluid appname">
             <img src="{% static 'images/Group 9.png' %}">
             <form class="d-flex usernav-links" role="search">
+                {% if user.is_authenticated %}
                 <p><a href="{% url 'home' %}">Home</a></p>
+                {% else %}
+                <p><a href="{% url '' %}">Home</a></p>
+                {% endif %}
                 <p><a href="">About Us</a></p>
 
                 {% if user.is_staff %}
@@ -40,28 +55,39 @@
                 {% endif %}
                 
                 {% if user.is_staff %}
-                <a href="{% url 'master_chat' %}">Chat</a>
-            {% else %}
-                <a href="{% url 'user_chat' %}">Chat</a>
-            {% endif %}
+                <p><a  class="nav-link" href="{% url 'master_chat' %}">Chat</a></p>
+                {% else %}
+                <p><a class="nav-link" href="{% url 'user_chat' %}">Chat</a></p>
+                {% endif %}
                 <p><a href="">Contact Us</a></p>
             </form>    
             {% if user.is_authenticated %}
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        User Menu
-                    </button>
+                    <a class="" type="button" id="" data-bs-toggle="dropdown" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="37" viewBox="0 0 36 37" fill="none">
+                            <path d="M6 27.9512C6 26.3599 6.63214 24.8337 7.75736 23.7085C8.88258 22.5833 10.4087 21.9512 12 21.9512H24C25.5913 21.9512 27.1174 22.5833 28.2426 23.7085C29.3679 24.8337 30 26.3599 30 27.9512C30 28.7468 29.6839 29.5099 29.1213 30.0725C28.5587 30.6351 27.7956 30.9512 27 30.9512H9C8.20435 30.9512 7.44129 30.6351 6.87868 30.0725C6.31607 29.5099 6 28.7468 6 27.9512Z" stroke="#2D2D2D" stroke-width="3" stroke-linejoin="round"/>
+                            <path d="M18 15.9512C20.4853 15.9512 22.5 13.9365 22.5 11.4512C22.5 8.96589 20.4853 6.95117 18 6.95117C15.5147 6.95117 13.5 8.96589 13.5 11.4512C13.5 13.9365 15.5147 15.9512 18 15.9512Z" stroke="#2D2D2D" stroke-width="3"/>
+                            </svg>
+                        </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                         {% if user.userreg_set.exists %}
                             <!-- If User is a registered user -->
                             <!-- <li><a class="dropdown-item" href="{% url 'profile' %}" style="text-align: left;">Profile</a></li> -->
-                        {% elif user.master_set.exists %}
-                            <li><a class="dropdown-item" href="{% url 'master_profile' %}" style="text-align: left;">Profile</a></li>
+                        {% elif user.is_staff %}
+                            <!-- If User is a master -->
+                            <form action="{% url 'master_profile' %}" method="post" class="">
+                                {% csrf_token %}
+                            <li><button class="btn btn-link" href="" style="text-decoration: none; color: black; text-align: left;">Profile</button></li>
+                            </form>
                         {% else %}
-                            <li><a class="dropdown-item" href="{% url 'profile' %}" style="text-align: left;">Profile</a></li>
+                            <!-- Handle cases where user type is unknown -->
+                            <form action="{% url 'profile' %}" method="post" class="">
+                                {% csrf_token %}
+                            <li><button class="btn btn-link" href="" style="text-decoration: none; color: black; text-align: left;">Profile</button></li>
+                            </form>
                         {% endif %}
                         <li>
-                            <form action="{% url 'logout' %}" method="post" class="dropdown-item">
+                            <form action="{% url 'logout' %}" method="post" class="">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-link" style="text-decoration: none; color: black; text-align: left;">Logout</button>
                             </form>
@@ -71,19 +97,20 @@
             {% endif %}
         </div>
     </nav>
-    <section style="margin-top: 100px;" class="container-fluid" id="dashboard">
+
+    <section class="container-fluid" id="dashboard">
         <div class="row">
             <div class="col-md-3">
                 <div class="sidebar">
                     {% for master in masters %}
                     <li class="flex-user-wrap">
-                        <img class="img-fluid" src="" alt="">
+                        <img class="img-fluid" src="{{ master.img.url }}" alt="">
                         <a href="?master_id={{ master.id }}">{{ master.username }}</a>
                     </li>
                     {% endfor %}
                 </div>
             </div>
-            <div class=" chat-display col-9">
+            <div class="chat-display col-9">
                 <div class="chat-hold">
                 <div>
                     {% for message in messages %}
@@ -101,7 +128,7 @@
                 <form method="post" class="chat-box" action="{% url 'send_message' %}">
                     {% csrf_token %}
                     <input type="hidden" name="receiver_master_id" value="{{ selected_master.id }}">
-                    <textarea name="message"></textarea>
+                    <input type="text" name="message"></input>
                     <button type="submit">Send</button>
                 </form>
             </div>

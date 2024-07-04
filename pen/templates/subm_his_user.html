@@ -83,10 +83,14 @@
                             </div>
                             <div class="col-md-8">
                                 {% if submission.feedbackdetails_set.exists %}
-                            {% for feedback in submission.feedbackdetails_set.all %}
-                                <p>{{ feedback.reviewed_by }}</p>
+                                {% for feedback in submission.feedbackdetails_set.all %}
+                                    {% if feedback.reviewed_by_user %}
+                                        <p>{{ feedback.reviewed_by_user.username }}</p>
+                                    {% else %}
+                                        <p>User is no longer available</p>
+                                    {% endif %}
                                 {% endfor %}
-                                {% endif %}
+                            {% endif %}
                             </div>
                         </div>
                         <div class="card-footer card-footer-flex">
