@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Chat</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <h2>Masters</h2>
+                <ul>
+                    {% for master in masters %}
+                    <li>
+                        <a href="?master_id={{ master.id }}">{{ master.username }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-8">
+                <h2>Chat with {{ selected_master.username }}</h2>
+                <div>
+                    {% for message in messages %}
+                    <div>
+                        {% if message.sender_user %}
+                            <strong>{{ message.sender_user.user.username }}</strong>:
+                        {% else %}
+                            <strong>{{ message.sender_master.username }}</strong>:
+                        {% endif %}
+                        {{ message.message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                <form method="post" action="{% url 'send_message' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="receiver_master_id" value="{{ selected_master.id }}">
+                    <textarea name="message"></textarea>
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

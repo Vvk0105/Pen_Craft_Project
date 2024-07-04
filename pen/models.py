@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import timezone
 # Create your models here.
 from django.contrib.auth.models import User
 
@@ -17,21 +17,23 @@ class UserReg(models.Model):
         return self.user.username
     
 
+
 class Master(models.Model):
-    username = models.CharField(max_length=150,default='name')  # Adjust max_length according to your needs
+    username = models.CharField(max_length=150, default='name')
     email = models.EmailField(default='example@example.com')
     phone = models.CharField(max_length=50, default='Not Provided')
     address = models.CharField(max_length=255, default='Not Provided')
-    qual = models.CharField(max_length=100, default='Not Provided')  # Adjust max_length according to your needs
-    field = models.CharField(max_length=100, default='Default Value')  # Adjust max_length according to your needs
+    qual = models.CharField(max_length=100, default='Not Provided')
+    field = models.CharField(max_length=100, default='Default Value')
     img = models.ImageField(upload_to='Profile')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)  
 
     def __str__(self):
         return self.user.username
 
 class WritingSubmission(models.Model):
-    CATEGORY_CHOICES = [
+    CATEGORY_CHOICES = [    
         ('Literature-Story', 'Literature-Story'),
         ('Poem', 'Poem'),
         ('Novel', 'Novel'),
@@ -72,3 +74,25 @@ class FeedbackDetails(models.Model):
 
     def __str__(self):
         return self.submission.title
+    
+
+class Complaint(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='complaints')
+    complaint_against = models.CharField(max_length=255)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Complaint by {self.user.username} against {self.complaint_against} on {self.created_at}"
+    
+
+class ChatMessage(models.Model):
+    sender_user = models.ForeignKey(UserReg, null=True, blank=True, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver_user = models.ForeignKey(UserReg, null=True, blank=True, on_delete=models.CASCADE, related_name='received_messages')
+    sender_master = models.ForeignKey(Master, null=True, blank=True, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver_master = models.ForeignKey(Master, null=True, blank=True, on_delete=models.CASCADE, related_name='received_messages')
+    message = models.TextField()
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.message

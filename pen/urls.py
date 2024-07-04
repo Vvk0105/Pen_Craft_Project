@@ -17,8 +17,10 @@ urlpatterns = [
     path('edit_profile/', views.edit_profile, name='edit_profile'),
     
     
-
     
+    path('user_chat/', views.user_chat, name='user_chat'),
+    path('master_chat/', views.master_chat, name='master_chat'),
+    path('send_message/', views.send_message, name='send_message'),
     path('submit_writing/', views.submit_writing, name='submit_writing'),
     path('check-content/<int:submission_id>/', views.check_content, name='check_content'),
     path('accept_submission/<int:submission_id>/', views.accept_submission, name='accept_submission'),
@@ -33,7 +35,9 @@ urlpatterns = [
     path('master_sub_hist/', views.master_sub_hist, name='master_sub_hist'),
     path('master_profile/', views.master_profile, name='master_profile'),
     path('master_edit_profile/', views.edit_master_profile, name='master_edit_profile'),
-    
+    path('submit_complaint/', views.submit_complaint, name='submit_complaint'),
+    path('view_complaints/', views.view_complaints, name='view_complaints'),
+    path('delete_master/<int:master_id>/', views.delete_master, name='delete_master'),
 
 
     path('admin_dashboard/', views.admin_dashboard,name='admin_dashboard'),
@@ -42,5 +46,5 @@ urlpatterns = [
     path('admin_master_view', views.admin_master_view,name='admin_master_view'),
     path('all_master', views.all_master,name='all_master'),
     path('all_writters', views.all_writters,name='all_writters'),
-    # path main folder latest version 1.1 1.1
+    # path main folder latest version 1.1 1.1 1.1.1.1
 ]

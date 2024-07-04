@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/admindashboard.css' %}" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>View Complaints</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <style>
+        table {
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            color: #00A3FF;
+        }
+
+        th,
+        td {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav id="Admin-nav">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <div class="admin-logo">
+                        <img src="{% static 'images/Group 199.png' %}">
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-2">
+                    <div class="admin-logoutbox">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="M12 21v-2h7V5h-7V3h7q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm-2-4l-1.375-1.45l2.55-2.55H3v-2h8.175l-2.55-2.55L10 7l5 5z" />
+                        </svg>
+                        <div class="admin-Logout-content">
+                            <a href="{% url 'logout' %}">
+                                <h3>Logout</h3>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section id="dashboard">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="sidebar">
+                    <div class="dashboard-box1 border">
+                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'admin_dashboard' %}">Dashboard ></a>
+                    </div>
+                    <h3>Master Writers</h3>
+                    <div class="dashboard-box2 border">
+                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'admin_master_view' %}">View request ></a>
+                    </div>
+                    <div class="dashboard-box3 border">
+                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'all_master' %}">All master writers ></a>
+                    </div>
+                    
+                    <h3>Users</h3>
+                    <div class="dashboard-box4 border">
+                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'all_writters' %}">View authors ></a>
+                    </div>
+                    <div class="dashboard-box5 border">
+                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'submission_history' %}">Submission history ></a>
+                    </div>
+                    <div class="dashboard-box6 border">
+                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'view_complaints' %}">View Complaints > </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="complaint-container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="pagecount">
+                                <h5>Rows Per Page</h5>
+                                <select>
+                                    <option>10</option>
+                                    <option>20</option>
+                                    <option>50</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-4">
+                            <div class='complaint-search'>
+                                <input type='text' placeholder='Search here' />
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12" fill="#d7f0fe"/>
+                                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m16.893 16.92l3.08 3.08m-.889-8.419c0 4.187-3.383 7.581-7.555 7.581c-4.173 0-7.556-3.394-7.556-7.58C3.973 7.393 7.356 4 11.528 4c4.173 0 7.556 3.394 7.556 7.581"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-complaint-table">
+                        <table class="mt-3">
+                            <colgroup>
+                                <col style="width: 5%">
+                                <col style="width: 15%">
+                                <col style="width: 20%">
+                                <col style="width: 40%">
+                                <col style="width: 20%">
+                            </colgroup>
+                            <thead style="height: 50px">
+                                <tr>
+                                    <th>Sl No</th>
+                                    <th>User</th>
+                                    <th>Complaint Against</th>
+                                    <th>Content</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody class="admintable-body">
+                                {% for complaint in complaints %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ complaint.user.username }}</td>
+                                    <td>{{ complaint.complaint_against }}</td>
+                                    <td>{{ complaint.content }}</td>
+                                    <td>{{ complaint.created_at }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <ul class="pagination">
+                            <li id="paginationlist"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="m14 18l-6-6l6-6l1.4 1.4l-4.6 4.6l4.6 4.6z"/></svg></li>
+                            <li class="pageli">1</li>
+                            <li class="pageli">2</li>
+                            <li class="pageli">3</li>
+                            <li class="pageli">...</li>
+                            <li class="pageli">10</li>
+                            <li id="paginationlist"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M12.6 12L8 7.4L9.4 6l6 6l-6 6L8 16.6z"/></svg></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

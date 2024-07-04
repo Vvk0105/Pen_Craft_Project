@@ -26,7 +26,7 @@
             </div>
             <div class="col-lg-8 signUp-hi">
                 <div class="signUp">
-                    <h2>Sign Up</h2>
+                    <h2>Master Sign Up</h2>
 
                     <!-- Alert messages -->
                     {% if messages %}
@@ -38,7 +38,7 @@
                     {% endif %}
                     <!-- End of alert messages -->
 
-                    <img id="preview_image" src="profileimage.png" alt="Profile Image Preview" style="display: none; max-width: 200px; max-height: 200px;">
+                    <img id="preview_image"  src="profileimage.png" alt="Profile Image Preview" style="display: none; max-width: 200px; max-height: 200px;">
                     <form action="" method="post" class="form-common" enctype="multipart/form-data" onsubmit="return handleFormSubmit(event);">
                         {% csrf_token %}
                         <div class="form-group">

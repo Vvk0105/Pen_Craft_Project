@@ -77,6 +77,14 @@
                                 <p>{{ submission.description }}</p>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h2>Reviewed By :</h2>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{ submission.description }}</p>
+                            </div>
+                        </div>
                         <div class="card-footer card-footer-flex">
                             {% if submission.feedbackdetails_set.exists %}
                             {% for feedback in submission.feedbackdetails_set.all %}

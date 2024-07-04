@@ -22,10 +22,13 @@ from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import UserReg, Master, WritingSubmission,FeedbackDetails
+from .models import UserReg, Master, WritingSubmission,FeedbackDetails,Complaint,ChatMessage
 import chardet
 from django.http import JsonResponse
 from django.contrib import messages
+from .forms import ComplaintForm
+from django.utils import timezone
+from django.db.models import Count
 
 
 # Initialize tools
@@ -170,6 +173,7 @@ def read_file_content(request, submission_id):
 
     return render(request, 'display_content.html', {'content': content, 'submission_id': submission_id})
 
+
 @login_required
 def submission_status(request):
     submissions = WritingSubmission.objects.filter(user=request.user)
@@ -263,7 +267,7 @@ def login_user(request):
         if user is not None:
             login(request, user)
             if user.is_superuser:
-                return redirect("admin_master_view")
+                return redirect("admin_dashboard")
             elif user.is_staff:
                 data = Master.objects.get(user=user)
                 request.session['id'] = data.id
@@ -296,17 +300,16 @@ def coReg(request):
             messages.error(request, 'Image is required. Please select an image to upload.')
             return redirect('coReg')
 
-        try:
-            usr = User.objects.create_user(
-                username=username, password=password, is_active=False, is_staff=True)
-            usr.save()
-            tut = Master.objects.create(username=username, email=email, phone=phone, address=address,
-                                        qual=qual, field=field, img=img, user=usr)
-            tut.save()
-            messages.success(request, 'Registration Successful. Please wait for admin approval.')
-            return redirect('login')
-        except Exception as e:
-            messages.error(request, 'Something went wrong: ' + str(e))
+        
+        usr = User.objects.create_user(
+            username=username, password=password, is_active=False, is_staff=True)
+        usr.save()
+        tut = Master.objects.create(username=username, email=email, phone=phone, address=address,
+                              qual=qual, field=field, img=img, user=usr)
+        tut.save()
+        messages.success(request, 'Registration Successful. Please wait for admin approval.')
+        return redirect('login')
+        
 
     return render(request, 'coReg.html')
 
@@ -360,6 +363,7 @@ def all_master(request):
     msg = ''
     datas = Master.objects.all()
     return render(request, 'all_master.html', {"datas": datas, "msg": msg})
+
 @login_required(login_url='login')
 def all_writters(request):
     msg = ''
@@ -368,6 +372,12 @@ def all_writters(request):
 @login_required(login_url='login')
 def admin_dashboard(request):
     return render(request,'admin_dashboard.html')
+
+def delete_master(request, master_id):
+    master = get_object_or_404(Master, id=master_id)
+    master.delete()
+    # messages.success(request, 'Master user deleted successfully.')
+    return redirect('all_master')
 
 
 # def view_submissions(request):
@@ -552,6 +562,137 @@ def edit_master_profile(request):
         return render(request, 'master_edit_profile.html', {'master': master_profile})
     else:
         return redirect('profile')
+    
+
+@login_required
+def submit_complaint(request):
+    if request.method == 'POST':
+        form = ComplaintForm(request.POST)
+        if form.is_valid():
+            complaint = form.save(commit=False)
+            complaint.user = request.user
+            complaint.save()
+            return redirect('home')  # Change 'home' to whatever page you want to redirect to
+    else:
+        form = ComplaintForm()
+    return render(request, 'submit_complaint.html', {'form': form})
+
+@login_required
+def view_complaints(request):
+    complaints = Complaint.objects.all()
+    context = {
+        'complaints': complaints
+    }
+    return render(request, 'view_complaints.html', context)
+
+
+@login_required
+def admin_dashboard(request):
+    # Get the total count of Master and UserReg
+    total_masters = Master.objects.count()
+    total_users = UserReg.objects.count()
+    
+    # Get weekly data for UserReg and Master
+    one_week_ago = timezone.now() - timezone.timedelta(days=7)
+    weekly_new_masters = Master.objects.filter(user__date_joined__gte=one_week_ago).count()
+    weekly_new_users = UserReg.objects.filter(user__date_joined__gte=one_week_ago).count()
+
+    context = {
+        'total_masters': total_masters,
+        'total_users': total_users,
+        'weekly_new_masters': weekly_new_masters,
+        'weekly_new_users': weekly_new_users,
+    }
+    
+    return render(request, 'admin_dashboard.html', context)
+
+
+def admin_dashboard(request):
+    total_masters = Master.objects.count()
+    total_users = UserReg.objects.count()
+
+    masters_approved = Master.objects.filter(user__is_active=True).count()
+    masters_pending = Master.objects.filter(user__is_active=False).count()
+
+    context = {
+        'total_masters': total_masters,
+        'total_users': total_users,
+        'masters_approved': masters_approved,
+        'masters_pending': masters_pending,
+    }
+
+    return render(request, 'admin_dashboard.html', context)
+
+#chat
+def user_chat(request):
+    masters = Master.objects.all()
+    selected_master = None
+    messages = []
+
+    if 'master_id' in request.GET:
+        selected_master = get_object_or_404(Master, id=request.GET.get('master_id'))
+        messages = ChatMessage.objects.filter(
+            (Q(sender_user=request.user.userreg) & Q(receiver_master=selected_master)) |
+            (Q(sender_master=selected_master) & Q(receiver_user=request.user.userreg))
+        ).order_by('timestamp')
+
+    context = {
+        'masters': masters,
+        'selected_master': selected_master,
+        'messages': messages,
+    }
+    return render(request, 'userchat.html', context)
+from django.db.models import Q
+
+@login_required
+def master_chat(request):
+    users = UserReg.objects.all()
+    selected_user = None
+    messages = []
+
+    if 'user_id' in request.GET:
+        selected_user = get_object_or_404(UserReg, id=request.GET.get('user_id'))
+        messages = ChatMessage.objects.filter(
+            Q(sender_master=request.user.master, receiver_user=selected_user) |
+            Q(sender_user=selected_user, receiver_master=request.user.master)
+        ).order_by('timestamp')
+
+    context = {
+        'users': users,
+        'selected_user': selected_user,
+        'messages': messages,
+    }
+    return render(request, 'masterchat.html', context)
+
+def send_message(request):
+    if request.method == 'POST':
+        message = request.POST.get('message')
+        receiver_master_id = request.POST.get('receiver_master_id')
+        receiver_user_id = request.POST.get('receiver_user_id')
+
+        if receiver_master_id:
+            receiver_master = get_object_or_404(Master, id=receiver_master_id)
+            ChatMessage.objects.create(
+                sender_user=request.user.userreg,
+                receiver_master=receiver_master,
+                message=message
+            )
+            return redirect('user_chat')
+
+        if receiver_user_id:
+            receiver_user = get_object_or_404(UserReg, id=receiver_user_id)
+            ChatMessage.objects.create(
+                sender_master=request.user.master,
+                receiver_user=receiver_user,
+                message=message
+            )
+            return redirect('master_chat')
+
+    # Handle the case where the request method is not POST
+    return redirect('user_chat')
+
+
+
 
 
 

@@ -39,9 +39,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tailwind',  # Ensure Tailwind is also added if you're using it
+    'theme', 
+    # third party apps
+    "crispy_forms",
+    # "crispy_tailwind",
 
     
 ]
+
+TAILWIND_APP_NAME = 'theme'  # Replace 'theme' with your actual app name
+
+NPM_BIN_PATH = "/usr/local/bin/npm"  # Adjust this path to your NPM installation
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

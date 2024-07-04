@@ -46,36 +46,41 @@
                 </div>
                 <p><a href="">Master Writers</a></p>
                 <p><a href="{% url 'submit_writing' %}">Check Document</a></p>
+                <p><a class="nav-link" href="{% url 'submit_complaint' %}">Add Complaint</a></p>
                 {% endif %}
-                <p><a href="">Chat</a></p>
+                
+                {% if user.is_staff %}
+                <a href="{% url 'master_chat' %}">Chat</a>
+            {% else %}
+                <a href="{% url 'user_chat' %}">Chat</a>
+            {% endif %}
                 <p><a href="">Contact Us</a></p>
             </form>    
             {% if user.is_authenticated %}
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-            User Menu
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-            {% if user.userreg_set.exists %}
-                <!-- If User is a registered user -->
-                <!-- <li><a class="dropdown-item" href="{% url 'profile' %}" style="text-align: left;">Profile</a></li> -->
-            {% elif user.master_set.exists %}
-                <!-- If User is a master -->
-                <li><a class="dropdown-item" href="{% url 'master_profile' %}" style="text-align: left;">Profile</a></li>
-            {% else %}
-                <!-- Handle cases where user type is unknown -->
-                <li><a class="dropdown-item" href="{% url 'profile' %}" style="text-align: left;">Profile</a></li>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        User Menu
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                        {% if user.userreg_set.exists %}
+                            <!-- If User is a registered user -->
+                            <!-- <li><a class="dropdown-item" href="{% url 'profile' %}" style="text-align: left;">Profile</a></li> -->
+                        {% elif user.master_set.exists %}
+                            <!-- If User is a master -->
+                            <li><a class="dropdown-item" href="{% url 'master_profile' %}" style="text-align: left;">Profile</a></li>
+                        {% else %}
+                            <!-- Handle cases where user type is unknown -->
+                            <li><a class="dropdown-item" href="{% url 'profile' %}" style="text-align: left;">Profile</a></li>
+                        {% endif %}
+                        <li>
+                            <form action="{% url 'logout' %}" method="post" class="dropdown-item">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link" style="text-decoration: none; color: black; text-align: left;">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             {% endif %}
-            <li>
-                <form action="{% url 'logout' %}" method="post" class="dropdown-item">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-link" style="text-decoration: none; color: black; text-align: left;">Logout</button>
-                </form>
-            </li>
-        </ul>
-    </div>
-{% endif %}
-
         </div>
     </nav>
 
@@ -123,24 +128,15 @@
                         <p>Ditch the Plagiarism Panic and Grammar Gaffes</p>
                     </div>
 
-
-
                 </div>
-
-
-
-
-
 
             </div>
             <div class="container-a-boxes2">
                 <div class="imgbox-3">
 
-
                     <div class="sub-a">
                         <h5><span>Levael </span> &nbsp;up your skills.</h5>
                     </div>
-
 
                     <div class="sub-b">
                         <h6>spelling</h6>
@@ -148,8 +144,6 @@
                         <p>The word leval does not seem to fit his content. Consider replacing it with a different one.
                         </p>
                     </div>
-
-
 
                 </div>
 
@@ -175,12 +169,8 @@
                 </ul>
 
             </div>
-
         </div>
-
-
     </section>
-
     <section id="box-3">
 
         <div class="box-3-subdiv">
@@ -402,94 +392,100 @@
 
     </section>
 
-        <section id="box-5">
-            <h1>Start your Journey Today !</h1>
-            <p>Become a member of Pen Craft, an online learning and development platform where the writers takes their
-                journey, while accessing craft resources and networking with industry professionals.</p>
+    <section id="box-5">
+        <h1>Start your Journey Today !</h1>
+        <p>Become a member of Pen Craft, an online learning and development platform where the writers takes their
+            journey, while accessing craft resources and networking with industry professionals.</p>
 
-            <div class="box-5-content-1">
-                <h2>100+</h2>
-                <h5>Masters</h5>
+        <div class="box-5-content-1">
+            <h2>100+</h2>
+            <h5>Masters</h5>
+        </div>
+
+        <div class="box-5-content-2">
+            <h2>200+</h2>
+            <h5> Users</h5>
+        </div>
+
+
+    </section>
+
+    <section id="box-6">
+
+        <div class="row">
+
+            <div class="col-6 box-6-img">
+<img src="{% static 'images/image 13 (1).png' %}">
             </div>
 
-            <div class="box-5-content-2">
-                <h2>200+</h2>
-                <h5> Users</h5>
+            <div class="col-6 box-6-content">
+<h1>Match with a Mentor</h1>
+<p>Mentors are like experienced friends who help you learn and grow.Pen whispers secrets, craft guides the hand. Loops and lines dance, meaning takes its stand. Sharpened strokes, a story unfolds. Confidence flows, the writer's heart is bold. Pencraft, your mentor, in ink and in soul.</p>
             </div>
 
+        </div>
 
-        </section>
+    </section>
 
-        <section id="box-6">
+    <section id="box-7">
 
-            <div class="row">
+        <h1>Contact us</h1>
+<p>Pen Craft empowers you to transform your ideas into polished, captivating content.</p>
+        <div class="row">
 
-                <div class="col-6 box-6-img">
-    <img src="{% static 'images/image 13 (1).png' %}">
-                </div>
-
-                <div class="col-6 box-6-content">
-    <h1>Match with a Mentor</h1>
-    <p>Mentors are like experienced friends who help you learn and grow.Pen whispers secrets, craft guides the hand. Loops and lines dance, meaning takes its stand. Sharpened strokes, a story unfolds. Confidence flows, the writer's heart is bold. Pencraft, your mentor, in ink and in soul.</p>
-                </div>
-
+            <div class="col-6 box-7-img" >
+<img src="{% static 'images/image 14.png' %}">
             </div>
 
-        </section>
-
-        <section id="box-7">
-
-            <h1>Contact us</h1>
-    <p>Pen Craft empowers you to transform your ideas into polished, captivating content.</p>
-            <div class="row">
-
-                <div class="col-6 box-7-img" >
-    <img src="{% static 'images/image 14.png' %}">
-                </div>
-
-                <div class="col-6 box-7-contactbox" >
-    <div class="box-7-contactform">
-        <div class='form-input'>
-            <input type='text' placeholder='Name'/>
-        </div>
-        <div class='form-input'>
-            <input type='email' placeholder='E-Mail'/>
-        </div>
-        <div class='form-input'>
-            <input type='text' placeholder='Question'/>
-        </div>
-        <div class='form-textarea'>
-            <textarea placeholder="Comments"></textarea>
-        </div>
-        <div class="form-button">
-            <button>Send Message</button>
-        </div>
+            <div class="col-6 box-7-contactbox" >
+<div class="box-7-contactform">
+    <div class='form-input'>
+        <input type='text' placeholder='Name'/>
     </div>
-                </div>
-
+    <div class='form-input'>
+        <input type='email' placeholder='E-Mail'/>
+    </div>
+    <div class='form-input'>
+        <input type='text' placeholder='Question'/>
+    </div>
+    <div class='form-textarea'>
+        <textarea placeholder="Comments"></textarea>
+    </div>
+    <div class="form-button">
+        <button>Send Message</button>
+    </div>
+</div>
             </div>
-        
 
-        </section>
-    <!-- ...rest of your sections... -->
+        </div>
+       
+
+    </section>
 
     <section id="footer">
         <div class="container">
             <div class="row">
+
                 <div class="col-md-6">
-                    <img src="{% static 'images/Group 9 (1).png' %}">
+                    <div>
+                        <img src="{% static 'images/Group 9 (1).png' %}">
+                    </div>
+                    
                 </div>
                 <div class="col-md-2">
                     <div class="footer_content">
                         <h3>Terms & Policies</h3>
                         <ul class="footer_list">
                             <li>Terms of Service</li>
-                            <li>Privacy Policy</li>
+                            <li>Priacy Policy</li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-2"></div>
                 <div class="col-md-2">
+<!-- blank space -->
+                </div>
+                <div class="col-md-2">
+
                     <div class="footer_content">
                         <h3>Contact</h3>
                         <ul class="footer_list">
@@ -497,10 +493,17 @@
                             <li>pencraft123@gmail.com</li>
                         </ul>
                     </div>
+                  
                 </div>
+
             </div>
         </div>
     </section>
 
+   
+        
+    </div>
+
 </body>
+
 </html>

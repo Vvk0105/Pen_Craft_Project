@@ -25,6 +25,7 @@ urlpatterns = [
     # path('master/', include('master.urls')),
     # path('master/', include('master.urls')),
     path('',include('pen.urls')),
+    # path('chat/',include('chat.urls',namespace='chat')),
 ]
 
 if settings . DEBUG:

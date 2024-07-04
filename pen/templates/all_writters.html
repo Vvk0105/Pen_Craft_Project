@@ -51,10 +51,11 @@
                         </svg>
                         {% if user.is_authenticated %}
                         <div class="icon">
-                            <form action="{% url 'logout' %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger" style="background-color: transparent; border: 2px solid blue; color: blue;">Logout</button>
-                            </form>
+                            <div class="admin-Logout-content">
+                                <a href="{% url 'logout' %}">
+                                    <h3>Logout</h3>
+                                </a>
+                            </div>
                         </div>
                     {% endif %}
                     </div>
@@ -83,6 +84,9 @@
                     </div>
                     <div class="dashboard-box5 border">
                         <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'submission_history' %}">Submission history ></a>
+                    </div>
+                    <div class="dashboard-box6 border">
+                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'view_complaints' %}">View Complaints > </a>
                     </div>
                 </div>
             </div>
