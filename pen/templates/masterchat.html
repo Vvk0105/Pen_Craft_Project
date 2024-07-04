@@ -4,32 +4,37 @@
     <title>Master Chat</title>
 </head>
 <body>
+    
     <div class="container">
         <div class="row">
-            <div class="col-4">
-                <h2>Users</h2>
-                <ul>
+            <div class="col-md-4">
+                <ul class="list-group">
                     {% for user in users %}
-                    <li>
-                        <a href="?user_id={{ user.id }}">{{ user.user.username }}</a>
-                    </li>
+                        <li class="list-group-item">
+                            <a href="?user_id={{ user.id }}">{{ user.user.username }}</a>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
-            <div class="col-8">
-                <h2>Chat with {{ selected_user.user.username }}</h2>
-                <div>
-                    {% for message in messages %}
-                    <div>
-                        {% if message.sender_user %}
-                            <strong>{{ message.sender_user.user.username }}</strong>:
-                        {% else %}
-                            <strong>{{ message.sender_master.username }}</strong>:
-                        {% endif %}
-                        {{ message.message }}
+            <div class="col-md-8">
+                {% if selected_user %}
+                    <h3>Chat with {{ selected_user.user.username }}</h3>
+                    <div class="messages">
+                        {% for message in messages %}
+                            <div class="{% if message.sender_master == master %}sent{% else %}received{% endif %}">
+                                <strong>
+                                    {% if message.sender_user %}
+                                        {{ message.sender_user.user.username }}
+                                    {% else %}
+                                        {{ message.sender_master.username }}
+                                    {% endif %}
+                                </strong>: {{ message.message }}
+                            </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
-                </div>
+                {% else %}
+                    <p>No conversations yet</p>
+                {% endif %}
                 <form method="post" action="{% url 'send_message' %}">
                     {% csrf_token %}
                     <input type="hidden" name="receiver_user_id" value="{{ selected_user.id }}">

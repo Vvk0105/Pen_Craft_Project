@@ -25,7 +25,11 @@
         <div class="container-fluid appname">
             <img src="{% static 'images/Group 9.png' %}">
             <form class="d-flex usernav-links" role="search">
-                <p><a href="">Home</a></p>
+                {% if user.is_authenticated %}
+                <p><a href="{% url 'home' %}">Home</a></p>
+                {% else %}
+                <p><a href="{% url '' %}">Home</a></p>
+                {% endif %}
                 <p><a href="">About Us</a></p>
 
                 {% if user.is_staff %}

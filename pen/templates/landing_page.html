@@ -31,7 +31,11 @@
             <img src="{% static 'images/Group 9.png' %}">
 
             <form class="d-flex usernav-links" role="search">
+                {% if user.is_authenticated %}
                 <p><a href="{% url 'home' %}">Home</a></p>
+                {% else %}
+                <p><a href="{% url 'index' %}">Home</a></p>
+                {% endif %}
                 <p><a href="#">About Us</a></p>
                 <p><a href="#">Contact Us</a></p>
             </form>

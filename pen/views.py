@@ -646,15 +646,19 @@ from django.db.models import Q
 
 @login_required
 def master_chat(request):
-    users = UserReg.objects.all()
+    master = get_object_or_404(Master, user=request.user)  # Get the Master object for the logged-in user
+    # Get users who have sent messages to the master
+    users = UserReg.objects.filter(sent_messages__receiver_master=master).distinct()
+    
     selected_user = None
     messages = []
 
     if 'user_id' in request.GET:
         selected_user = get_object_or_404(UserReg, id=request.GET.get('user_id'))
+        # Filter messages between the selected user and the master
         messages = ChatMessage.objects.filter(
-            Q(sender_master=request.user.master, receiver_user=selected_user) |
-            Q(sender_user=selected_user, receiver_master=request.user.master)
+            Q(sender_master=master, receiver_user=selected_user) |
+            Q(sender_user=selected_user, receiver_master=master)
         ).order_by('timestamp')
 
     context = {
@@ -677,7 +681,7 @@ def send_message(request):
                 receiver_master=receiver_master,
                 message=message
             )
-            return redirect('user_chat')
+            return redirect(f'/user_chat/?master_id={receiver_master_id}')
 
         if receiver_user_id:
             receiver_user = get_object_or_404(UserReg, id=receiver_user_id)
@@ -686,7 +690,7 @@ def send_message(request):
                 receiver_user=receiver_user,
                 message=message
             )
-            return redirect('master_chat')
+            return redirect(f'/master_chat/?user_id={receiver_user_id}')
 
     # Handle the case where the request method is not POST
     return redirect('user_chat')
