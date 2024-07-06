@@ -29,6 +29,9 @@
         height: 100%;
         /* overflow-y: auto; */
     }
+    #dashboard{
+        margin-left: -12px;
+    }
 </style>
 <body>
     <nav id='common-home-navbar' class="navbar bg-body-tertiary">
@@ -107,9 +110,9 @@
         </div>
     </nav>
 
-    <section class="container-fluid" id="dashboard" style="background-color: #EFF9FE;">
+    <div class="container-fluid" id="dashboard">
         <div class="row">
-            <div class="col-md-3" style="margin-left: -12px;">
+            <div class="col-md-3">
                 <div class="sidebar">
                     {% for master in masters %}
                     <li class="flex-user-wrap">
@@ -120,21 +123,25 @@
                 </div>
             </div>
             <div class="chat-display col-9">
-                <div class="chat-hold" style="background-color: #ffff;padding: 1px;">
-                    <div style="background-color: white;border-radius: 40px; padding: 25px; margin-top: -1px;">
-                        {% for message in messages %}
-                        <div>
-                            {% if message.sender_user %}
-                                <strong class="sender">{{ message.message }}</strong>
-                                <div class="clearfix"></div>
-                            {% else %}
-                                <strong >{{ message.message }}</strong>
-                            {% endif %}
-                            
-                        </div>
-                        {% endfor %}
+                <div class="chat-hold" style="height: 550px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+                    <div>
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div>
+                                    {% if message.sender_user %}
+                                        <strong class="sender">{{ message.message }}</strong>
+                                        <div class="clearfix"></div>
+                                    {% else %}
+                                        <strong>{{ message.message }}</strong>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div style="text-align: center; padding-top: 25%;">No messages available.</div>
+                        {% endif %}
                     </div>
                 </div>
+                
                 <form method="post" class="chat-box" action="{% url 'send_message' %}" >
                     {% csrf_token %}
                     <input type="hidden" name="receiver_master_id" value="{{ selected_master.id }}">
@@ -148,7 +155,7 @@
             </div>
             </div>
         </div>
-    </section>
+    </div>
             
         </div>
     </div>

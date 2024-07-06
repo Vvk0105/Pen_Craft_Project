@@ -400,6 +400,9 @@ def home_view(request):
     msg = ''
     return render(request, 'home.html', {"top_feedbacks":top_feedbacks,"msg": msg})
 
+def about(request):
+    return render(request,'about.html')
+
 
 
 def adminmaster(request):

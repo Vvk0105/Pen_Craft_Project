@@ -20,6 +20,8 @@ urlpatterns = [
     path('password_reset_request/', views.password_reset_request, name='password_reset_request'),
     path('reset_password/<str:username>/', views.reset_password, name='reset_password'),
     path('home/',views.home_view,name='home'),
+    path('about/',views.about,name='about'),
+
 
     path('user_chat/', views.user_chat, name='user_chat'),
     path('master_chat/', views.master_chat, name='master_chat'),

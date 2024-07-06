@@ -1,0 +1,34 @@
+#hero {
+    box-sizing: border-box;
+    background-image: url("../images/Vector\ 17.png");
+    /* height: 90vh; */
+    /* background-image: url(../images/Frame 131.png); */
+    background-position: top 0% right 63%;
+    /* background-size: cover; */
+    height: 530px;
+    text-align: center;
+    position: relative;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    color: #fff;
+}
+
+.banner{
+    /* background-image: url('image\ 3.png'); */
+    padding-top: 6rem;
+    padding-left: 7rem;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat; 
+    padding: 100px;
+}
+
+    background-image: url(../images/Frame 131.png);
+    background-position: top 0% right 63%;
+    background-size: cover;
+    height: 485px;
+    text-align: center;
+    position: relative;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    color: #fff;
