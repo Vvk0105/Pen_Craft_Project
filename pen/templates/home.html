@@ -48,7 +48,7 @@
                       <a href="{% url 'subm_his_user' %}">View submission history</a>
                     </div>
                 </div>
-                <p><a href="">Master Writers</a></p>
+                <p><a href="{% url 'view_masters' %}">Master Writers</a></p>
                 <p><a href="{% url 'submit_writing' %}">Check Document</a></p>
                 <p><a class="nav-link" href="{% url 'submit_complaint' %}">Add Complaint</a></p>
                 {% endif %}
@@ -184,189 +184,37 @@
             </div>
         </div>
     </section>
-    <section id="box-3">
-
-        <div class="box-3-subdiv">
-
-            <div class="box-3-heading">
-                <h1>Top 5 Writing</h1>
-            </div>
-
-            <div class="row">
-
-
-                <div class=" card  col-3">
-                    <div class="slno">
-                        <h1>1</h1>
-                    </div>
-
-                    <div class="card-flximg">
-                        <img src="{% static 'images/Rectangle 53.png' %}">
-                    </div>
-
-                    <div class="row card-content">
-
-                        <div class="col-4 spclhead">
-                            <h4>Writers name </h4>
-                            <h4>Category</h4>
-                            <h4>Title</h4>
-                            <h4>Summary</h4>
-                        </div>
-
-                        <div class="col-1 spclhead">
-                            <h4>:</h4>
-                            <h4>:</h4>
-                            <h4>:</h4>
-                            <h4>:</h4>
-
-                        </div>
-
-                        <div class="col-7">
-
-                            <h4>Ashok AK</h4>
-                            <h4>Article</h4>
-                            <h4>Backyard Birds Making a Comeback in Urban Areas </h4>
-                            <h4>Cities are becoming more bird-friendly, with residents planting native gardens and
-                                putting
-                                up feeders. This is leading to a rise in urban bird populations, with species like
-                                chickadees and finches thriving. The article explores the reasons behind this trend and
-                                the
-                                benefits of having birds in our cities.</h4>
-
-                        </div>
-
-
-
-                    </div>
-
-                    <div class="readmore spclhead">
-                        <h4>Read More </h4>
-                    </div>
-
-                    <div class="card-marks">
-                        <h4 class="spclhead">Mark</h4>
-                        <h1>95%</h1>
-                    </div>
-
-                </div>
-
-                <div class=" card  col-3">
-                    <div class="slno">
-                        <h1>2</h1>
-                    </div>
-
-                    <div class="card-flximg">
-                        <img src="{% static 'images/Rectangle 53.png' %}">
-                    </div>
-
-                    <div class="row card-content">
-
-                        <div class="col-4 spclhead">
-                            <h4>Writers name </h4>
-                            <h4>Category</h4>
-                            <h4>Title</h4>
-                            <h4>Summary</h4>
-                        </div>
-
-                        <div class="col-1 spclhead">
-                            <h4>:</h4>
-                            <h4>:</h4>
-                            <h4>:</h4>
-                            <h4>:</h4>
-
-                        </div>
-
-                        <div class="col-7">
-
-                            <h4>Ashok AK</h4>
-                            <h4>Article</h4>
-                            <h4>Backyard Birds Making a Comeback in Urban Areas </h4>
-                            <h4>Cities are becoming more bird-friendly, with residents planting native gardens and
-                                putting
-                                up feeders. This is leading to a rise in urban bird populations, with species like
-                                chickadees and finches thriving. The article explores the reasons behind this trend and
-                                the
-                                benefits of having birds in our cities.</h4>
-
-                        </div>
-
-
-
-                    </div>
-
-                    <div class="readmore spclhead">
-                        <h4>Read More </h4>
-                    </div>
-
-                    <div class="card-marks">
-                        <h4 class="spclhead">Mark</h4>
-                        <h1>95%</h1>
-                    </div>
-
-                </div>
-
-                <div class=" card  col-3">
-                    <div class="slno">
-                        <h1>3</h1>
-                    </div>
-
-                    <div class="card-flximg">
-                        <img src="{% static 'images/Rectangle 53.png' %}">
-                    </div>
-
-                    <div class="row card-content">
-
-                        <div class="col-4 spclhead">
-                            <h4>Writers name </h4>
-                            <h4>Category</h4>
-                            <h4>Title</h4>
-                            <h4>Summary</h4>
-                        </div>
-
-                        <div class="col-1 spclhead">
-                            <h4>:</h4>
-                            <h4>:</h4>
-                            <h4>:</h4>
-                            <h4>:</h4>
-
-                        </div>
-
-                        <div class="col-7">
-
-                            <h4>Ashok AK</h4>
-                            <h4>Article</h4>
-                            <h4>Backyard Birds Making a Comeback in Urban Areas </h4>
-                            <h4>Cities are becoming more bird-friendly, with residents planting native gardens and
-                                putting
-                                up feeders. This is leading to a rise in urban bird populations, with species like
-                                chickadees and finches thriving. The article explores the reasons behind this trend and
-                                the
-                                benefits of having birds in our cities.</h4>
-
-                        </div>
-
-
-
-                    </div>
-
-                    <div class="readmore spclhead">
-                        <h4>Read More ></h4>
-                    </div>
-
-                    <div class="card-marks">
-                        <h4 class="spclhead">Mark</h4>
-                        <h1>95%</h1>
-                    </div>
-
-                </div>
-
-
-            </div>
-
+   <section id="box-3">
+    <div class="box-3-subdiv">
+        <div class="box-3-heading">
+            <h1>Top 3 Writings</h1>
         </div>
 
+        <div class="row">
+            {% if top_feedbacks_writings %}
+                {% for feedback in top_feedbacks_writings %}
+                    <div class="card col-3">
+                        <div class="slno">
+                            <h1>{{ forloop.counter }}</h1>
+                        </div>
 
-    </section>
+                        <div class="card-content">
+                            <h4>Writer's Name: {{ feedback.submission.user.username }}</h4>
+                            <h4>Category: {{ feedback.submission.category }}</h4>
+                            <h4>Title: {{ feedback.submission.title }}</h4>
+                            <h4>Summary: {{ feedback.submission.description|truncatewords_html:20 }}</h4>
+                            <h4>Total Mark: {{ feedback.total_mark }}</h4>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No top writings found.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+    
 
     <section id="box-4">
 
@@ -448,26 +296,10 @@
 
             <div class="col-6 box-7-img" >
 <img src="{% static 'images/image 14.png' %}">
+
             </div>
 
             <div class="col-6 box-7-contactbox" >
-<div class="box-7-contactform">
-    <div class='form-input'>
-        <input type='text' placeholder='Name'/>
-    </div>
-    <div class='form-input'>
-        <input type='email' placeholder='E-Mail'/>
-    </div>
-    <div class='form-input'>
-        <input type='text' placeholder='Question'/>
-    </div>
-    <div class='form-textarea'>
-        <textarea placeholder="Comments"></textarea>
-    </div>
-    <div class="form-button">
-        <button>Send Message</button>
-    </div>
-</div>
             </div>
 
         </div>
@@ -516,7 +348,25 @@
    
         
     </div>
-
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+    
+            for (let link of links) {
+                link.addEventListener("click", function(e) {
+                    e.preventDefault();
+    
+                    const targetID = this.getAttribute("href").substring(1);
+                    const targetElement = document.getElementById(targetID);
+    
+                    window.scrollTo({
+                        top: targetElement.offsetTop,
+                        behavior: "smooth"
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

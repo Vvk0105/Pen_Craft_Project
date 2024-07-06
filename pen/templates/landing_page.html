@@ -37,7 +37,7 @@
                 <p><a href="{% url 'index' %}">Home</a></p>
                 {% endif %}
                 <p><a href="#">About Us</a></p>
-                <p><a href="#">Contact Us</a></p>
+                <p><a href="#box-7">Contact Us</a></p>
             </form>
             {% if user.is_authenticated %}
             <div class="icon">
@@ -213,23 +213,34 @@
             </div>
 
             <div class="col-6 box-7-contactbox" >
-<div class="box-7-contactform">
-    <div class='form-input'>
-        <input type='text' placeholder='Name'/>
-    </div>
-    <div class='form-input'>
-        <input type='email' placeholder='E-Mail'/>
-    </div>
-    <div class='form-input'>
-        <input type='text' placeholder='Question'/>
-    </div>
-    <div class='form-textarea'>
-        <textarea placeholder="Comments"></textarea>
-    </div>
-    <div class="form-button">
-        <button>Send Message</button>
-    </div>
-</div>
+                <form action="{% url 'contact' %}" method="post">
+                    {% csrf_token %}
+                    <div class="box-7-contactform">
+                        <div class='form-input'>
+                            <input type='text' name="name" placeholder='Name'/>
+                        </div>
+                        <div class='form-input'>
+                            <input type='email' name="email" placeholder='E-Mail'/>
+                        </div>
+                        <div class='form-input'>
+                            <input type='text' name="question" placeholder='Question'/>
+                        </div>
+                        <div class='form-textarea'>
+                            <textarea name="comments" placeholder="Comments"></textarea>
+                        </div>
+                        <div class="form-button">
+                            <button type="submit">Send Message</button>
+                        </div>
+                    </div>
+                </form>
+            
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
 
         </div>
@@ -278,7 +289,26 @@
    
         
     </div>
-
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+    
+            for (let link of links) {
+                link.addEventListener("click", function(e) {
+                    e.preventDefault();
+    
+                    const targetID = this.getAttribute("href").substring(1);
+                    const targetElement = document.getElementById(targetID);
+    
+                    window.scrollTo({
+                        top: targetElement.offsetTop,
+                        behavior: "smooth"
+                    });
+                });
+            }
+        });
+    </script>
+    
 </body>
 
 </html>

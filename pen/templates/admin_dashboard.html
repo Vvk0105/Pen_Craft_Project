@@ -77,33 +77,43 @@
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-  // Load the Visualization API and the corechart package.
-  google.charts.load('current', {'packages':['corechart']});
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', {'packages':['corechart']});
 
-  // Set a callback to run when the Google Visualization API is loaded.
-  google.charts.setOnLoadCallback(drawChart);
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
 
-  function drawChart() {
-      var data = google.visualization.arrayToDataTable([
-          ['Generation', 'Descendants'],
-          [0, 1], [1, 33], [2, 269], [3, 2013]
-      ]);
+    function drawChart() {
+        // Get data from Django template context
+        var mastersApproved = {{ masters_approved }};
+        var mastersPending = {{ masters_pending }};
+        var totalMasters = {{ total_masters }};
 
-      var options = {
-          title: 'Descendants by Generation',
-          hAxis: {title: 'Generation', minValue: 0, maxValue: 3},
-          vAxis: {title: 'Descendants', minValue: 0, maxValue: 2100},
-          trendlines: {
-              0: {
-                  type: 'exponential',
-                  visibleInLegend: true,
-              }
-          }
-      };
+        // Prepare data for the chart
+        var data = google.visualization.arrayToDataTable([
+            ['Status', 'Count'],
+            ['Approved', mastersApproved],
+            ['Pending', mastersPending],
+            ['Total', totalMasters]
+        ]);
 
-      var chart = new google.visualization.ScatterChart(document.getElementById('chart_div2'));
-      chart.draw(data, options);
-  }
+        var options = {
+            title: 'Master Registration Status',
+            hAxis: {title: 'Status'},
+            vAxis: {title: 'Count'},
+            legend: { position: 'bottom' },
+            curveType: 'function', // This makes the chart non-linear
+            pointSize: 5,
+            colors: ['#4A90E2'],  // Set the line color to blue
+            areaOpacity: 0.2,  // Set the fill opacity
+            lineWidth: 2,  // Set the line width
+            backgroundColor: { fill: 'transparent' },  // Transparent background if needed
+            chartArea: { width: '80%', height: '70%' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div2'));
+        chart.draw(data, options);
+    }
 </script>
 
 <section id="dashboard">
@@ -131,6 +141,9 @@
                 <div class="dashboard-box6 border">
                     <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'view_complaints' %}">View Complaints > </a>
                 </div>
+                <div class="dashboard-box6 border">
+                    <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'enquiries' %}">View Enquiries > </a>
+                </div>
             </div>
         </div>
         <div class="col-md-10">
@@ -140,17 +153,16 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="count-card blue">
-                                <h1>123K</h1>
-                                <h3 class="label">Label</h3>
+                                <h1>{{ total_users }}</h1>
+                                <h3 class="label">Registered Users</h3>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
                                     <path d="M13.875 35.25H27.375V32.75H13.875V35.25ZM13.875 25.25H34.125V22.75H13.875V25.25ZM13.875 15.25H34.125V12.75H13.875V15.25ZM6 44V4H42V44H6ZM8.25 41.5H39.75V6.5H8.25V41.5Z" fill="#00A3FF"/>
-                                    </svg>
-
+                                </svg>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="count-card green">
-                                <h1>123K</h1>
+                                <h1>{{ article_count }}</h1>
                                 <h3 class="label">Label</h3>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
                                     <path d="M13.875 35.25H27.375V32.75H13.875V35.25ZM13.875 25.25H34.125V22.75H13.875V25.25ZM13.875 15.25H34.125V12.75H13.875V15.25ZM6 44V4H42V44H6ZM8.25 41.5H39.75V6.5H8.25V41.5Z" fill="#00A3FF"/>
@@ -160,8 +172,8 @@
                         </div>
                         <div class="col-md-4">
                             <div class="count-card blue">
-                                <h1>123K</h1>
-                                <h3 class="label">Label</h3>
+                                <h1>{{ total_masters }}</h1>
+                                <h3 class="label">Master Writters</h3>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
                                     <path d="M13.875 35.25H27.375V32.75H13.875V35.25ZM13.875 25.25H34.125V22.75H13.875V25.25ZM13.875 15.25H34.125V12.75H13.875V15.25ZM6 44V4H42V44H6ZM8.25 41.5H39.75V6.5H8.25V41.5Z" fill="#00A3FF"/>
                                     </svg>
@@ -177,27 +189,34 @@
                                 <div id="chart_div2"></div>
                             </div>
                            
-                    <div class="statistics">
+                    <!-- <div class="statistics">
                         <h3>Statistics</h3>
                         <p>Total Masters: {{ total_masters }}</p>
                         <p>Total Users: {{ total_users }}</p>
                         <p>New Masters This Week: {{ weekly_new_masters }}</p>
                         <p>New Users This Week: {{ weekly_new_users }}</p>
-                    </div>
+                    </div> -->
                         </div>
                     </div>
                     
                 </div>
                 <div class="col-md-4">
                     <div class="ring-container-wrap">
+                        <div class="row mb-3">
+                            <div class="col">
+                                <button type="button" class="btn btn-primary" id="btn-master">Master</button>
+                                <button type="button" class="btn btn-secondary" id="btn-article">Article</button>
+                            </div>
+                        </div>
                         <div id="multi" class="ring-container"></div>
-                        <div class="ring-container">
+                        <div id="dynamic-content" class="ring-container">
                             <h4>Approved Masters: {{ masters_approved }}</h4>
                             <h4>Pending Requests: {{ masters_pending }}</h4>
+                            <h4>Masters Registered: {{ total_masters }}</h4>
                         </div>
                     </div>
-                    
                 </div>
+                
             </div>
         </div>
     </div>
@@ -211,21 +230,74 @@
 <script src="{% static 'js/radialMultiProgress.js' %}"></script>
 <script>
     $(document).ready(function() {
+
         var masters_approved = {{ masters_approved }};
         var masters_pending = {{ masters_pending }};
         var total_masters = {{ total_masters }};
 
-        $("#multi").radialMultiProgress({
-            thickness: 10,
-            space: 0,
-            antiAlias: true,
-            scaleLabel: true,
-            data: [
-                { id: 'approvedBar', color: "#c5dba4", range: [0, total_masters], value: masters_approved },
-                { id: 'pendingBar', color: "#91e67e", range: [0, total_masters], value: masters_pending }
-            ]
+        var article_submitted = 0;  
+        var article_opened = 0;     
+        var article_completed = 0;  
+
+    
+        function updateRadialProgress(approved, pending, total) {
+            // $("#multi").empty(); 
+            $("#multi").radialMultiProgress({
+                thickness: 10,
+                space: 0,
+                antiAlias: true,
+                scaleLabel: true,
+                data: [
+                    { id: 'approvedBar', color: "#c5dba4", range: [0, total], value: approved },
+                    { id: 'pendingBar', color: "#91e67e", range: [0, total], value: pending },
+                    { id: 'totalBar', color: "#96f051", range: [0, total], value: total },
+                ]
+            });
+        }
+
+        // updateRadialProgress(masters_approved, masters_pending, total_masters);  
+
+        $('#btn-master').click(function() {
+            $('#dynamic-content').html(`
+                <h4>Approved Masters: ${masters_approved}</h4>
+                <h4>Pending Requests: ${masters_pending}</h4>
+                <h4>Masters Registered: ${total_masters}</h4>
+            `);
+            // Update radial progress with master data
+            updateRadialProgress(masters_approved, masters_pending, total_masters);
+        });
+
+        $('#btn-article').click(function() {
+            $.ajax({
+                url: '{% url "get_article_counts" %}',
+                method: 'GET',
+                success: function(data) {
+                    // console.log("Received article data:", data);
+                  
+                    article_submitted = data.submitted_count;
+                    article_opened = data.open_count;
+                    article_completed = data.completed_count;
+                    
+                    // console.log("Updated article counts:", article_submitted, article_opened, article_completed);
+
+                    $('#dynamic-content').html(`
+                        <h4>Submitted Articles: ${article_submitted}</h4>
+                        <h4>Opened Articles: ${article_opened}</h4>
+                        <h4>Completed Articles: ${article_completed}</h4>
+                    `);
+                    
+                    updateRadialProgress(article_submitted, article_opened, article_submitted + article_opened + article_completed);
+                },
+                error: function(xhr, status, error) {
+                    // Handle error responses if needed
+                    console.error("Error fetching article data:", error);
+                }
+            });
         });
     });
 </script>
+
+
 </body>
 </html>
+

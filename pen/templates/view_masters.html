@@ -1,10 +1,12 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>User Chat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/chatwith.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admindashboard.css' %}" />
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
@@ -15,21 +17,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Master Details</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <style>
+        table {
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+        th {
+            color: #00A3FF;
+        }
+        th,
+        td {
+            padding: 10px;
+        }
+    </style>
 </head>
-<style>
-    body {
-        overflow: hidden;
-    }
-    .chat-display {
-        overflow: auto;
-        height: 78vh; 
-        overflow-y: auto;
-    }
-    .chat-hold {
-        height: 100%;
-        overflow-y: auto;
-    }
-</style>
+
 <body>
     <nav id='common-home-navbar' class="navbar bg-body-tertiary">
         <div class="container-fluid appname">
@@ -107,45 +112,89 @@
         </div>
     </nav>
 
-    <section class="container-fluid" id="dashboard">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="sidebar">
-                    {% for master in masters %}
-                    <li class="flex-user-wrap">
-                        <img class="img-fluid" src="{{ master.img.url }}" alt="">
-                        <a href="?master_id={{ master.id }}">{{ master.username }}</a>
-                    </li>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="chat-display col-9">
-                <div class="chat-hold">
-                <div>
-                    {% for message in messages %}
-                    <div>
-                        {% if message.sender_user %}
-                            <strong class="sender">{{ message.message }}</strong>
-                            <div class="clearfix"></div>
-                        {% else %}
-                            <strong >{{ message.message }}</strong>
-                        {% endif %}
-                        
+    <section id="dashboard">
+            <div class="col-md-12">
+                <div class="author-container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="pagecount">
+                                <h5>Rows Per Page</h5>
+                                <select>
+                                    <option>1</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-4">
+                            <div class='author-search'>
+                                <input type='text' placeholder='Search here' />
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="12" fill="#d7f0fe"/>
+                                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m16.893 16.92l3.08 3.08m-.889-8.419c0 4.187-3.383 7.581-7.555 7.581c-4.173 0-7.556-3.394-7.556-7.58C3.973 7.393 7.356 4 11.528 4c4.173 0 7.556 3.394 7.556 7.581"/>
+                                </svg>
+                            </div>       
+                        </div>
                     </div>
-                    {% endfor %}
+
+                    <div class="admin-author-table">
+                        <table class="mt-3">
+                            <colgroup>
+                                <col style="width: 10%">
+                                <col style="width: 10%">
+                                <col style="width: 10%">
+                                <col style="width: 15%">
+                                <col style="width: 10%">
+                                <col style="width: 15%">
+                                <col style="width: 15%">
+                                <col style="width: 10%">
+                                <col style="width: 10%">
+                            </colgroup>
+                            <thead style="height: 50px">
+                                <tr>
+                                    <th>Sl No</th>
+                                    <th>Profile</th>
+                                    <th>User Name</th>
+                                    <th>E-mail</th>
+                                    <th>Contact no</th>
+                                    <th>Address</th>
+                                    <th>Type</th>
+                                    <th>Qualification</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody class="admintable-body">
+                                {% for master in datas %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td id="authorimg">
+                                        <img src="{{ master.img.url }}" alt="Profile Image">
+                                    </td>
+                                    <td>{{ master.username }}</td>
+                                    <td>{{ master.email }}</td>
+                                    <td>{{ master.phone }}</td>
+                                    <td>{{ master.address }}</td>
+                                    <td>{{ master.field }}</td>
+                                    <td>{{ master.qual }}</td>
+                                    <td>{{ master.description }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <ul class="pagination">
+                            <li id="paginationlist"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="m14 18l-6-6l6-6l1.4 1.4l-4.6 4.6l4.6 4.6z"/></svg></li>
+                            <li class="pageli">1</li>
+                            <li class="pageli">2</li>
+                            <li class="pageli">3</li>
+                            <li class="pageli">...</li>
+                            <li class="pageli">10</li>
+                            <li id="paginationlist"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M12.6 12L8 7.4L9.4 6l6 6l-6 6L8 16.6z"/></svg></li>
+                        </ul>
+                    </div>
                 </div>
-                <form method="post" class="chat-box" action="{% url 'send_message' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="receiver_master_id" value="{{ selected_master.id }}">
-                    <input type="text" name="message"></input>
-                    <button type="submit">Send</button>
-                </form>
-            </div>
             </div>
         </div>
     </section>
-            
-        </div>
-    </div>
 </body>
+
 </html>

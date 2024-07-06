@@ -22,7 +22,7 @@ from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import UserReg, Master, WritingSubmission,FeedbackDetails,Complaint,ChatMessage
+from .models import UserReg, Master, WritingSubmission,FeedbackDetails,Complaint,ChatMessage,ContactFormSubmission
 import chardet
 from django.http import JsonResponse
 from django.contrib import messages
@@ -173,11 +173,26 @@ def read_file_content(request, submission_id):
 
     return render(request, 'display_content.html', {'content': content, 'submission_id': submission_id})
 
+def delete_submission(request, submission_id):
+    submission = get_object_or_404(WritingSubmission, id=submission_id)
+    if request.method == 'POST':
+        submission.delete()
+        messages.success(request, 'Submission deleted successfully.')
+        return redirect('submission_list')  # Redirect to the list of submissions
+    return render(request, 'delete_confirmation.html', {'submission': submission})
+
 
 @login_required
 def submission_status(request):
     submissions = WritingSubmission.objects.filter(user=request.user)
     return render(request, 'submission_status.html', {'submissions': submissions})
+
+@login_required
+def reject_submission(request, submission_id):
+    submission = get_object_or_404(WritingSubmission, id=submission_id)
+    submission.status = 'rejected'
+    submission.save()
+    return redirect('view_submissions')
 
 
 
@@ -259,27 +274,56 @@ def registration(request):
 
 
 def login_user(request):
-    next_url = request.GET.get('next', 'home') 
+    next_url = request.GET.get('next', 'home')  # Default to 'home' if 'next' parameter is not present
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
+        # Use `authenticate` to get the user
         user = authenticate(username=username, password=password)
+        
         if user is not None:
-            login(request, user)
             if user.is_superuser:
+                login(request, user)
                 return redirect("admin_dashboard")
             elif user.is_staff:
-                data = Master.objects.get(user=user)
-                request.session['id'] = data.id
-                return redirect(next_url)  # Redirect to next URL or home
+                master_profile = Master.objects.filter(user=user).first()
+                if master_profile:
+                    # if not master_profile.is_approved:
+                    #     messages.error(request, "Your account is not yet approved by the admin. Please wait for approval.")
+                    #     return render(request, 'login.html')
+                    if not user.is_active:
+                        messages.error(request, "Your account is not yet approved. Please wait for approval. .")
+                        return render(request, 'login.html')
+                    else:
+                        login(request, user)
+                        request.session['id'] = master_profile.id
+                        return redirect(next_url)  # Redirect to next URL or home
+                else:
+                    messages.error(request, "Master profile not found.")
+                    return render(request, 'login.html')
             else:
-                data = UserReg.objects.get(user=user)
-                request.session['id'] = data.id
-                return redirect(next_url)  # Redirect to next URL or home
+                user_profile = UserReg.objects.filter(user=user).first()
+                if user_profile:
+                    login(request, user)
+                    request.session['id'] = user_profile.id
+                    return redirect(next_url)  # Redirect to next URL or home
+                else:
+                    messages.error(request, "User profile not found.")
+                    return render(request, 'login.html')
         else:
-            messages.error(request, 'Invalid username or password.')
+            # If user is None, it means either the credentials are wrong or the user is inactive
+            try:
+                user = User.objects.get(username=username)
+                if not user.is_active:
+                    messages.error(request, "Your account is not yet approved. Please wait for approval. .")
+                else:
+                    messages.error(request, 'Invalid username or password.')
+            except User.DoesNotExist:
+                messages.error(request, 'Invalid username or password.')
+
     return render(request, 'login.html')
 
+        
 def coReg(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -321,6 +365,15 @@ def coReg(request):
         
 
     return render(request, 'coReg.html')
+
+def home_view(request):
+    top_feedbacks = FeedbackDetails.objects.order_by('-total_mark')[:3]
+    top_feedbacks_writings = [(feedback, feedback.submission) for feedback in top_feedbacks]
+    
+    context = {
+        'top_feedbacks_writings': top_feedbacks_writings,
+    }
+    return render(request, 'home.html', context)
 
 
 def adminmaster(request):
@@ -594,6 +647,36 @@ def view_complaints(request):
     }
     return render(request, 'view_complaints.html', context)
 
+def view_masters(request):
+    msg = ''
+    datas = Master.objects.all()
+    return render(request, 'view_masters.html', {"datas": datas, "msg": msg})
+
+def     enquiries(request):
+    msg = ''
+    datas = ContactFormSubmission.objects.all()
+    return render(request, 'enquiries.html', {"datas": datas, "msg": msg})
+
+def contact_view(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        question = request.POST.get('question')
+        comments = request.POST.get('comments')
+        
+        # Create a new ContactFormSubmission object and save it
+        ContactFormSubmission.objects.create(
+            name=name,
+            email=email,
+            question=question,
+            comments=comments,
+        )
+        
+        messages.success(request, 'Your message has been sent!')
+        return redirect('contact')  # Redirect to the same contact page or another page
+    
+    return render(request, 'landing_page.html')
+
 
 @login_required
 def admin_dashboard(request):
@@ -615,10 +698,14 @@ def admin_dashboard(request):
     
     return render(request, 'admin_dashboard.html', context)
 
-
+@login_required
 def admin_dashboard(request):
     total_masters = Master.objects.count()
     total_users = UserReg.objects.count()
+    article_count = WritingSubmission.objects.filter(status='completed').count()
+    submitted_count = WritingSubmission.objects.filter(status='submitted').count()
+    open_count = WritingSubmission.objects.filter(status='open').count()
+    
 
     masters_approved = Master.objects.filter(user__is_active=True).count()
     masters_pending = Master.objects.filter(user__is_active=False).count()
@@ -628,9 +715,25 @@ def admin_dashboard(request):
         'total_users': total_users,
         'masters_approved': masters_approved,
         'masters_pending': masters_pending,
+        'article_count': article_count,
+        'submitted_count': submitted_count,
+        'open_count': open_count,
     }
 
     return render(request, 'admin_dashboard.html', context)
+
+def get_article_counts(request):
+    submitted_count = WritingSubmission.objects.filter(status='submitted').count()
+    open_count = WritingSubmission.objects.filter(status='open').count()
+    completed_count = WritingSubmission.objects.filter(status='completed').count()
+    
+    data = {
+        'submitted_count': submitted_count,
+        'open_count': open_count,
+        'completed_count': completed_count
+    }
+    return JsonResponse(data)
+
 
 #chat
 def user_chat(request):

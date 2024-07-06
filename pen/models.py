@@ -29,6 +29,7 @@ class Master(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=timezone.now)
     description = models.TextField(default='Not Provided')
+    is_approved = models.BooleanField(default=False)
 
     def delete(self, *args, **kwargs):
         user = self.user
@@ -38,14 +39,22 @@ class Master(models.Model):
     def __str__(self):
         return self.user.username
 
+
 class WritingSubmission(models.Model):
-    CATEGORY_CHOICES = [    
+    CATEGORY_CHOICES = [
         ('Literature-Story', 'Literature-Story'),
         ('Poem', 'Poem'),
         ('Novel', 'Novel'),
         ('Article', 'Article'),
         ('Journals', 'Journals'),
     ]
+
+    STATUS_CHOICES = (
+        ('submitted', 'Submitted'),
+        ('open', 'Open'),
+        ('completed', 'Completed'),
+        ('rejected', 'Rejected'),
+    )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
@@ -54,21 +63,11 @@ class WritingSubmission(models.Model):
     file = models.FileField(upload_to='submissions/')
     submitted_at = models.DateTimeField(auto_now_add=True)
     is_accepted = models.BooleanField(default=False)
-
-
-
-    STATUS_CHOICES = (
-        ('submitted', 'Submitted'),
-        ('open', 'Open'),
-        ('completed', 'Completed'),
-    )
-
-
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='submitted')
-    is_accepted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
+
     
 class FeedbackDetails(models.Model):
     submission = models.ForeignKey(WritingSubmission, on_delete=models.CASCADE)
@@ -109,3 +108,14 @@ class ChatMessage(models.Model):
 
     def __str__(self):
         return self.message
+
+
+class ContactFormSubmission(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    question = models.CharField(max_length=255)
+    comments = models.TextField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.email}"

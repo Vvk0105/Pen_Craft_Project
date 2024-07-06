@@ -37,9 +37,15 @@ urlpatterns = [
     path('master_edit_profile/', views.edit_master_profile, name='master_edit_profile'),
     path('submit_complaint/', views.submit_complaint, name='submit_complaint'),
     path('view_complaints/', views.view_complaints, name='view_complaints'),
+    path('view_masters/', views.view_masters, name='view_masters'),
     path('delete_master/<int:master_id>/', views.delete_master, name='delete_master'),
+    path('reject/<int:submission_id>/', views.reject_submission, name='reject_submission'),
 
-
+    
+    
+    path('enquiries/', views.enquiries, name='enquiries'),
+    path('contact/', views.contact_view, name='contact'),
+    path('get_article_counts/', views.get_article_counts, name='get_article_counts'),
     path('admin_dashboard/', views.admin_dashboard,name='admin_dashboard'),
     path('adminmaster/', views.adminmaster,name='adminmaster'),
     path('approvemaster', views.approvemaster,name='approvemaster'),
