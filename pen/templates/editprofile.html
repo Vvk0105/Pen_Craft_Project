@@ -12,9 +12,10 @@
 <body>
     <div class="container mt-5">
         <div class="card">
+            
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h2>Edit Profile</h2>
-                <button class="btn btn-danger btn-sm">✖</button>
+                <button onclick="history.back()" class="btn btn-danger btn-sm">✖</button>
             </div>
             <div class="card-body">
                 <form method="post" action="{% url 'edit_profile' %}" enctype="multipart/form-data">

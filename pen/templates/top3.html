@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <section id="box-3">
+        <div class="box-3-subdiv">
+            <div class="box-3-heading">
+                <h1>Top 3 Writings</h1>
+            </div>
+    
+            <div class="row">
+                
+                    {% for feedback in top_feedbacks %}
+                        <div class="card col-3">
+                            <div class="slno">
+                                <h1>{{ forloop.counter }}</h1>
+                            </div>
+    
+                            <div class="card-content">
+                                <h4>Writer's Name: {{ feedback.submission.user.username }}</h4>
+                                <h4>Category: {{ feedback.submission.category }}</h4>
+                                <h4>Title: {{ feedback.submission.title }}</h4>
+                                <h4>Summary: {{ feedback.submission.description|truncatewords_html:20 }}</h4>
+                                <h4>Total Mark: {{ feedback.total_mark }}</h4>
+                            </div>
+                        </div>
+                    {% endfor %}
+            </div>
+        </div>
+    </section>
+</body>
+</html>

@@ -58,7 +58,7 @@
                 {% else %}
                 <p><a class="nav-link" href="{% url 'user_chat' %}">Chat</a></p>
                 {% endif %}
-                <p><a href="">Contact Us</a></p>
+                <!-- <p><a href="">Contact Us</a></p> -->
             </form>    
             {% if user.is_authenticated %}
                 <div class="dropdown">
@@ -184,35 +184,64 @@
             </div>
         </div>
     </section>
-   <section id="box-3">
-    <div class="box-3-subdiv">
+    <section id="box-3">
+        <div class="box-3-subdiv" style="margin-left: 18rem;">
         <div class="box-3-heading">
             <h1>Top 3 Writings</h1>
         </div>
 
         <div class="row">
-            {% if top_feedbacks_writings %}
-                {% for feedback in top_feedbacks_writings %}
+            {% for feedback in top_feedbacks %}
                     <div class="card col-3">
                         <div class="slno">
                             <h1>{{ forloop.counter }}</h1>
                         </div>
-
-                        <div class="card-content">
-                            <h4>Writer's Name: {{ feedback.submission.user.username }}</h4>
-                            <h4>Category: {{ feedback.submission.category }}</h4>
-                            <h4>Title: {{ feedback.submission.title }}</h4>
-                            <h4>Summary: {{ feedback.submission.description|truncatewords_html:20 }}</h4>
-                            <h4>Total Mark: {{ feedback.total_mark }}</h4>
+                        <div class="card-flximg">
+                            {% if feedback.submission.user.userreg.image %}
+                            <img src="{{ feedback.submission.user.userreg.image.url }}" alt="Writer's Image">
+                        {% else %}
+                            <img src="{% static 'images/image.png' %}" alt="Default Image">
+                        {% endif %}
                         </div>
+                        <div class="row card-content">
+                            <div class="col-4 spclhead">
+                                <h4>Writers name </h4>
+                                <h4>Category</h4>
+                                <h4>Title</h4>
+                                <h4>Summary</h4>
+                            </div>
+    
+                            <div class="col-1 spclhead">
+                                <h4>:</h4>
+                                <h4>:</h4>
+                                <h4>:</h4>
+                                <h4>:</h4>
+    
+                            </div>
+    
+                            <div class="col-7">
+
+                                <h4>{{ feedback.submission.user.username }}</h4>
+                                <h4>{{ feedback.submission.category }}</h4>
+                                <h4>{{ feedback.submission.title }}</h4>
+                                <h4>{{ feedback.submission.description|truncatewords_html:20 }}</h4>
+
+                            </div>
+
+                        </div>
+                        <div class="readmore spclhead">
+                            <h4>Read More </h4>
+                        </div>
+    
+                        <div class="card-marks">
+                            <h4 class="spclhead">Mark</h4>
+                            <h4>{{ feedback.total_mark|floatformat:1 }}</h4>
+                        </div>                    
                     </div>
                 {% endfor %}
-            {% else %}
-                <p>No top writings found.</p>
-            {% endif %}
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
     
 
@@ -288,24 +317,7 @@
 
     </section>
 
-    <section id="box-7">
-
-        <h1>Contact us</h1>
-<p>Pen Craft empowers you to transform your ideas into polished, captivating content.</p>
-        <div class="row">
-
-            <div class="col-6 box-7-img" >
-<img src="{% static 'images/image 14.png' %}">
-
-            </div>
-
-            <div class="col-6 box-7-contactbox" >
-            </div>
-
-        </div>
-       
-
-    </section>
+    
 
     <section id="footer">
         <div class="container">

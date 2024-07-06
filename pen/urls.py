@@ -6,8 +6,10 @@ nltk.download('wordnet')
 nltk.download('averaged_perceptron_tagger')
 
 urlpatterns = [
+            
+
     path('', views.index, name='index'),
-    path('home/', views.HomePage, name='home'),
+   
     path('logout/', views.LogoutPage, name='logout'),
     path('registration/', views.registration, name='registration'),
     path('login/', views.login_user, name='login'),
@@ -15,9 +17,10 @@ urlpatterns = [
     path('edit_profile/', views.edit_profile, name='edit_profile'),
     path('profile/', views.profile, name='profile'),
     path('edit_profile/', views.edit_profile, name='edit_profile'),
-    
-    
-    
+    path('password_reset_request/', views.password_reset_request, name='password_reset_request'),
+    path('reset_password/<str:username>/', views.reset_password, name='reset_password'),
+    path('home/',views.home_view,name='home'),
+
     path('user_chat/', views.user_chat, name='user_chat'),
     path('master_chat/', views.master_chat, name='master_chat'),
     path('send_message/', views.send_message, name='send_message'),
@@ -41,7 +44,6 @@ urlpatterns = [
     path('delete_master/<int:master_id>/', views.delete_master, name='delete_master'),
     path('reject/<int:submission_id>/', views.reject_submission, name='reject_submission'),
 
-    
     
     path('enquiries/', views.enquiries, name='enquiries'),
     path('contact/', views.contact_view, name='contact'),

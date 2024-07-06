@@ -21,6 +21,9 @@
     <title>Master Details</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <style>
+        body{
+            overflow: scroll;
+        }
         table {
             width: 100%;
             border: 1px solid #ddd;
@@ -73,7 +76,7 @@
                 {% else %}
                 <p><a class="nav-link" href="{% url 'user_chat' %}">Chat</a></p>
                 {% endif %}
-                <p><a href="">Contact Us</a></p>
+                <!-- <p><a href="">Contact Us</a></p> -->
             </form>    
             {% if user.is_authenticated %}
                 <div class="dropdown">
@@ -112,27 +115,27 @@
         </div>
     </nav>
 
-    <section id="dashboard">
+    
             <div class="col-md-12">
-                <div class="author-container">
+                <div class="author-container" style="margin-top: -3rem;">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="pagecount">
+                            <!-- <div class="pagecount">
                                 <h5>Rows Per Page</h5>
                                 <select>
                                     <option>1</option>
                                 </select>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="col-md-2"></div>
                         <div class="col-md-4">
-                            <div class='author-search'>
+                            <!-- <div class='author-search'>
                                 <input type='text' placeholder='Search here' />
                                 <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" viewBox="0 0 24 24">
                                     <circle cx="12" cy="12" r="12" fill="#d7f0fe"/>
                                     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m16.893 16.92l3.08 3.08m-.889-8.419c0 4.187-3.383 7.581-7.555 7.581c-4.173 0-7.556-3.394-7.556-7.58C3.973 7.393 7.356 4 11.528 4c4.173 0 7.556 3.394 7.556 7.581"/>
                                 </svg>
-                            </div>       
+                            </div>        -->
                         </div>
                     </div>
 
@@ -194,7 +197,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    
 </body>
 
 </html>

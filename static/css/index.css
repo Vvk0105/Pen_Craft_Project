@@ -450,7 +450,7 @@ padding-top: 1rem;
     padding: .2rem .7rem;
     position: absolute;
     right: 1rem;
-    top: 26rem;
+    top: 18rem;
 }
 
 .card-marks h4 {
@@ -480,6 +480,7 @@ padding-top: 1rem;
     padding-bottom: 30rem;
     background-image: url("../images/Frame\ 20.png");
     background-position: top 60% right 63%;
+    padding-left: 13rem;
 }
 
 .elipsce-2{

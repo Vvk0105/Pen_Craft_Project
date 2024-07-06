@@ -366,14 +366,40 @@ def coReg(request):
 
     return render(request, 'coReg.html')
 
+def password_reset_request(request):
+    error_message = None
+    if request.method == 'POST':
+        username = request.POST['username']
+        try:
+            user = User.objects.get(username=username)
+            return redirect('reset_password', username=username)
+        except User.DoesNotExist:
+            error_message = 'Username does not exist.'
+    
+    return render(request, 'reset_password_request.html', {'error_message': error_message})
+
+def reset_password(request, username):
+    error_message = None
+    if request.method == 'POST':
+        old_password = request.POST['old_password']
+        new_password = request.POST['new_password']
+        user = get_object_or_404(User, username=username)
+        
+        if user.check_password(old_password):
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, 'Password has been reset successfully.')
+            return redirect('login')
+        else:
+            error_message = 'Old password is incorrect.'
+    
+    return render(request, 'reset_password.html', {'username': username, 'error_message': error_message})
+
 def home_view(request):
     top_feedbacks = FeedbackDetails.objects.order_by('-total_mark')[:3]
-    top_feedbacks_writings = [(feedback, feedback.submission) for feedback in top_feedbacks]
-    
-    context = {
-        'top_feedbacks_writings': top_feedbacks_writings,
-    }
-    return render(request, 'home.html', context)
+    msg = ''
+    return render(request, 'home.html', {"top_feedbacks":top_feedbacks,"msg": msg})
+
 
 
 def adminmaster(request):
