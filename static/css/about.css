@@ -1,16 +1,32 @@
 #hero {
     box-sizing: border-box;
-    background-image: url("../images/Vector\ 17.png");
+    background-image: url("../images/Frame\ 427319043.png");
     /* height: 90vh; */
     /* background-image: url(../images/Frame 131.png); */
-    background-position: top 0% right 63%;
+    /* background-position: top 0% right 63%; */
     /* background-size: cover; */
-    height: 530px;
+    height: 590px;
+    /* text-align: center;
+    position: relative;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    color: #fff; */
+}
+
+#hero1 {
+    background-image: url("../images/Frame 427319049.png");
+    background-size: cover; /* Adjust to cover the entire section */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Ensure the background image doesn't repeat */
+    height: 590px;
     text-align: center;
     position: relative;
     font-family: "Poppins", sans-serif;
     font-weight: 600;
     color: #fff;
+    box-sizing: border-box;
+    width: 117vh;
+    margin-left: 45vh;
 }
 
 .banner{
@@ -23,7 +39,7 @@
     padding: 100px;
 }
 
-    background-image: url(../images/Frame 131.png);
+    /* background-image: url(../images/Frame 131.png);
     background-position: top 0% right 63%;
     background-size: cover;
     height: 485px;
@@ -31,4 +47,4 @@
     position: relative;
     font-family: "Poppins", sans-serif;
     font-weight: 600;
-    color: #fff;
+    color: #fff; */

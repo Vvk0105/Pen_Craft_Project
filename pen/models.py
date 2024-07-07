@@ -42,8 +42,8 @@ class Master(models.Model):
 
 class WritingSubmission(models.Model):
     CATEGORY_CHOICES = [
-        ('Literature-Story', 'Literature-Story'),
-        ('Poem', 'Poem'),
+        ('Story', 'Story'),
+        ('Poet', 'Poet'),
         ('Novel', 'Novel'),
         ('Article', 'Article'),
         ('Journals', 'Journals'),
