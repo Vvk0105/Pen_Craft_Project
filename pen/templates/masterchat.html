@@ -133,7 +133,7 @@
             </div>
             <div class="chat-display col-9" style="overflow: hidden;">
                 {% if selected_user %}
-                <div id="chat-container" class="chat-hold" style="height: 537px; overflow-y: auto; border: 1px solid #ccc; padding: 0px; position: relative;">
+                <div id="chat-container" class="chat-hold" style="height: -webkit-fill-available; overflow-y: auto; border: 1px solid #ccc; padding: 0px; position: relative;">
                     <div class="chat-top" style="position: sticky; top: 0; background-color: #fff; border-bottom: 1px solid #ccc; padding: 10px;">
                         <a href="{% url 'home' %}" class="" style="position: absolute; top: 12px; left: 10px;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="47" height="47" viewBox="0 0 47 47" fill="none">
