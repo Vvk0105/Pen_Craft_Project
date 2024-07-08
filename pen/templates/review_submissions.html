@@ -22,7 +22,6 @@
         <div class="container">
             <div class="row margintorow">
                 <div class="col-md-12">
-
                     <a href="{% url 'home' %}" class="goback-topage">
                         <svg xmlns="http://www.w3.org/2000/svg" width="27" height="28" viewBox="0 0 27 28" fill="none">
                             <path
@@ -31,18 +30,15 @@
                         </svg>
                         Review Submissions
                     </a>
-
                 </div>
             </div>
             <div class="row">
-
-
-                {% for submission in submissions %}
+                {% for writing in writings %}
                 <div class="col-md-6 col-lg-4 col-sm-12">
                     <div class="writer-card">
                         <div class="row">
                             <div class="col-md-12">
-                                <img class="img-fluid" src="{{ submission.user.userreg.image.url }}" alt="{{ submission.user.username }}">
+                                <img class="img-fluid" src="{{ writing.user.userreg.image.url }}" alt="{{ writing.user.username }}">
                             </div>
                         </div>
                         <div class="row">
@@ -50,7 +46,7 @@
                                 <h2>Writer name :</h2>
                             </div>
                             <div class="col-md-8">
-                                <p>{{ submission.user.username }}</p>
+                                <p>{{ writing.user.username }}</p>
                             </div>
                         </div>
                         <div class="row">
@@ -58,7 +54,7 @@
                                 <h2>Title :</h2>
                             </div>
                             <div class="col-md-8">
-                                <p>{{ submission.title }} </p>
+                                <p>{{ writing.title }}</p>
                             </div>
                         </div>
                         <div class="row">
@@ -66,7 +62,7 @@
                                 <h2>Category :</h2>
                             </div>
                             <div class="col-md-8">
-                                <p>{{ submission.category }}</p>
+                                <p>{{ writing.category }}</p>
                             </div>
                         </div>
                         <div class="row">
@@ -74,16 +70,16 @@
                                 <h2>Summary :</h2>
                             </div>
                             <div class="col-md-8">
-                                <p>{{ submission.description }}</p>
+                                <p>{{ writing.description }}</p>
                             </div>
                         </div>
                         <div class="row">
-                            <a href="{% url 'read_file_content' submission.id %}" class="acceptreview" style="text-decoration: none;">Accept</a>
+                            <a href="{% url 'read_file_content' writing.id %}" class="acceptreview" style="text-decoration: none;">Accept</a>
                         </div>
                     </div>
                 </div>
-
                 {% endfor %}
+            </div>
         </div>
     </div>
     <section id="footer">

@@ -9,7 +9,7 @@ from spellchecker import SpellChecker
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .models import WritingSubmission
-
+from django.core.paginator import Paginator
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -447,19 +447,53 @@ def submit_writing(request):
 @login_required(login_url='login')
 def admin_master_view(request):
     msg = ''
-    data = Master.objects.all()
-    return render(request, 'master_view_request.html', {"data": data, "msg": msg})
+    query = request.GET.get('q')
+    
+    if query:
+        data_list = Master.objects.filter(username__icontains=query)
+    else:
+        data_list = Master.objects.all()
+    
+    # Pagination logic
+    paginator = Paginator(data_list, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'master_view_request.html', {"page_obj": page_obj, "msg": msg})
+
+
 @login_required(login_url='login')
 def all_master(request):
     msg = ''
-    datas = Master.objects.all()
-    return render(request, 'all_master.html', {"datas": datas, "msg": msg})
+    query = request.GET.get('q')
+    
+    if query:
+        datas = Master.objects.filter(username__icontains=query)
+    else:
+        datas = Master.objects.all()
+    
+    paginator = Paginator(datas, 7)  # Show 10 masters per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'all_master.html', {"page_obj": page_obj, "msg": msg, "query": query})
 
 @login_required(login_url='login')
 def all_writters(request):
     msg = ''
-    content = UserReg.objects.all()
-    return render(request, 'all_writters.html', {"content": content, "msg": msg})
+    query = request.GET.get('q')
+    
+    if query:
+        content = UserReg.objects.filter(user__username__icontains=query)
+    else:
+        content = UserReg.objects.all()
+    
+    paginator = Paginator(content, 10)  # Show 10 users per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'all_writters.html', {"page_obj": page_obj, "msg": msg, "query": query})
+
 @login_required(login_url='login')
 def admin_dashboard(request):
     return render(request,'admin_dashboard.html')
@@ -480,9 +514,43 @@ def is_staff(user):
     return user.is_staff
 @login_required(login_url='login')
 @user_passes_test(is_staff)
+
 def view_submissions(request):
-    submissions = WritingSubmission.objects.filter(status__in=['submitted', 'opened and under review'])
-    return render(request, 'review_submissions.html', {"submissions": submissions})
+    # Get the current user
+    user = request.user
+
+    # Check if the user is a master
+    if hasattr(user, 'master'):
+        master = user.master
+        # Get writings corresponding to the master's field
+        writings = WritingSubmission.objects.filter(category=master.field,status__in=['submitted', 'opened and under review'])
+    else:
+        messages.error(request, "You do not have the required permissions to view this page.")
+        return redirect('home')
+
+    return render(request, 'review_submissions.html', {'writings': writings})
+
+# def view_submissions(request):
+#     user = request.user
+#     if user.profile.role == 'poet_master':
+#         submissions = WritingSubmission.objects.filter(category='poet')
+#     elif user.profile.role == 'article_master':
+#         submissions = WritingSubmission.objects.filter(category='article')
+#     else:
+#         submissions = WritingSubmission.objects.none()  # Or handle other cases as needed
+
+#     return render(request, 'review_submissions.html', {'submissions': submissions})
+
+
+
+# def view_submissions(request):
+#     category = request.GET.get('category', '')
+#     if category:
+#         submissions = WritingSubmission.objects.filter(status__in=['submitted', 'opened and under review'], category=category)
+#     else:
+#         submissions = WritingSubmission.objects.filter(status__in=['submitted', 'opened and under review'])
+#     categories = WritingSubmission.CATEGORY_CHOICES
+#     return render(request, 'review_submissions.html', {"submissions": submissions, "categories": categories, "selected_category": category})
 
 #accept 
 # @login_required(login_url='login')    
@@ -538,16 +606,34 @@ def submission_history(request):
     
     return render(request, 'submission_history.html', context)
 
-
 def master_sub_hist(request):
-    # Fetch all submissions and prefetch the related feedback details
-    submissions = WritingSubmission.objects.prefetch_related('feedbackdetails_set').all()
-    
+    # Ensure the user is authenticated and is a master
+    if not request.user.is_authenticated or not hasattr(request.user, 'master'):
+        messages.error(request, "You do not have the required permissions to view this page.")
+        return redirect('home')
+
+    # Get the master's field
+    master_field = request.user.master.field
+
+    # Fetch all submissions corresponding to the master's field
+    submissions = WritingSubmission.objects.filter(category=master_field).prefetch_related('feedbackdetails_set')
+
     context = {
         'submissions': submissions,
     }
-    
+
     return render(request, 'master_sub_hist.html', context)
+
+
+# def master_sub_hist(request):
+#     # Fetch all submissions and prefetch the related feedback details
+#     submissions = WritingSubmission.objects.prefetch_related('feedbackdetails_set').all()
+    
+#     context = {
+#         'submissions': submissions,
+#     }
+    
+#     return render(request, 'master_sub_hist.html', context)
 
 def subm_his_user(request):
     # Ensure the user is authenticated
@@ -615,9 +701,9 @@ def edit_profile(request):
 @login_required
 def master_profile(request):
     if not request.user.is_authenticated:
-        return redirect('login')  # Redirect to login if the user is not authenticated
+        return redirect('login') 
 
-    if request.user.is_staff:  # Check if the user is a master (assuming masters are staff users)
+    if request.user.is_staff: 
         try:
             master_profile = Master.objects.get(user=request.user)
         except Master.DoesNotExist:
@@ -671,15 +757,33 @@ def submit_complaint(request):
 @login_required
 def view_complaints(request):
     complaints = Complaint.objects.all()
-    context = {
-        'complaints': complaints
-    }
-    return render(request, 'view_complaints.html', context)
+    msg = ''
+    query = request.GET.get('q')
+
+    if query:
+        data_list = Complaint.objects.filter(username__icontains=query)
+    else:
+        data_list = Complaint.objects.all()
+
+    paginator = Paginator(data_list, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'view_complaints.html', {'page_obj':page_obj})
 
 def view_masters(request):
     msg = ''
+    query = request.GET.get('q')
+
+    if query:
+        data_list = Master.objects.filter(username__icontains=query)
+    else:
+        data_list = Master.objects.all()
+
+    paginator = Paginator(data_list, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     datas = Master.objects.all()
-    return render(request, 'view_masters.html', {"datas": datas, "msg": msg})
+    return render(request, 'view_masters.html', {"page_obj": page_obj, "msg": msg})
 
 def     enquiries(request):
     msg = ''
@@ -798,7 +902,7 @@ def master_chat(request):
         selected_user = get_object_or_404(UserReg, id=request.GET.get('user_id'))
         # Filter messages between the selected user and the master
         messages = ChatMessage.objects.filter(
-            Q(sender_master=master, receiver_user=selected_user) |
+            Q(sender_master=master, receiver_user=selected_user) | 
             Q(sender_user=selected_user, receiver_master=master)
         ).order_by('timestamp')
 

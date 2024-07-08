@@ -1,0 +1,284 @@
+.pc-fullpage {
+        background: #F2FAFF url(bg.png) top left no-repeat;
+        background-size: cover;
+        padding: 50px;
+    }
+
+    .face-hi {
+        background-color: #00A3FF;        
+        border-radius: 32px 0px 0px 32px;
+    }
+
+    .face {
+        padding: 20px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .face h2 {
+        color: white;
+        margin-top: 33%;
+        margin-bottom: 25%;
+        color: var(--icon-color, #FFF);
+        text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        font-family: Poppins;
+        font-size: 48px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        letter-spacing: 2.4px;
+    }
+
+    .face ul {
+        color: var(--icon-color, #FFF);
+        font-family: Poppins;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 200%; /* 30px */
+        margin-top: 35px;
+        margin-bottom: 50px;
+    }
+
+    .signUp-hi {
+        background: #fff;
+        border-radius: 0px 32px 32px 0px;
+    }
+
+    .signUp {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .signUp h2 {
+        color: #00A3FF;
+        margin-top: 15%;
+        text-align: center;
+        text-shadow: 0px 0.889px 0.889px rgba(0, 0, 0, 0.25);
+        font-family: Poppins;
+        font-size: 40px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        margin-bottom: 5%;
+    }
+    
+    .signUp a.profileimage {
+        color: #00A3FF;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        text-decoration: none;
+        display: block;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .signUp a.ialready {
+        color: #00A3FF;
+        text-align: center;
+        text-shadow: 0px 0.567px 0.567px rgba(0, 0, 0, 0.25);
+        font-family: Poppins;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 500;
+        text-decoration: none;
+        line-height: normal;
+        display: block;
+        margin-top: 20px;
+        margin-bottom: 60px;
+        text-align: center;
+    }
+
+    .form-common label {
+        color: #00A3FF;
+        text-shadow: 0px 0.553px 0.553px rgba(0, 0, 0, 0.25);
+        font-family: Poppins;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+
+    .form-common .forgotpass {
+        float: right;
+        width: 100%;
+        float: right;
+        display: block;
+        width: 100%;
+        text-align: right;
+    }
+
+    .form-common .col-md-6, .form-common .col-md-12 {
+        padding-left: 10px;
+        position: relative;
+        padding-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    .form-common-signinpass svg {
+        bottom: 36px !important;
+    }
+
+    .form-common .col-md-6 input, .form-common .col-md-12 input  {
+        padding: 12px 10px;
+    }
+
+    .form-common .col-md-6 svg, .form-common .col-md-12 svg  {
+        position: absolute;
+        right: 20px;
+        bottom: 9px;
+    }
+
+    .form-forgot {
+        width: 100%;
+    }
+
+    .forgotpass a {
+        color: #00A3FF;
+        text-shadow: 0px 0.553px 0.553px rgba(0, 0, 0, 0.25);
+        font-family: Poppins;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        text-decoration: none;
+    }
+
+    .infopass {
+        margin-bottom: 50px;
+        display: block;
+        color: #142349;
+        font-family: Poppins;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+    button.btn {
+        margin-top: 20px;
+        border-radius: 40px;
+        color: white;
+        border: 1px solid #E6F6FF;
+        background: linear-gradient(93deg, #1067EA 0.18%, #9B60FA 100.18%);
+        padding: 20px 100px;
+        border-radius: 50px;
+        margin: 0 auto;
+        display: flex;
+        margin-top: 42px;
+    }
+
+    .fullpagecontainer {
+        background-color: #F2FAFF;
+        min-height: 200px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+    .goback-topage {
+        border: 0;
+        background-color: transparent;
+
+    }
+    .goback-topage  {
+
+        text-decoration: none;
+        color: #00A3FF;
+        font-family: Poppins;
+        font-size: 40px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+    }
+
+    .writer-card {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 20px 0px rgba(0, 163, 255, 0.20);
+    }
+    .writer-card img {
+        text-align: center;
+        display: block;
+        margin: auto;
+        border-radius: 20px;
+        margin-bottom: 20px;
+    }
+    .margintorow {
+        margin-bottom: 50px;
+    }
+    .writer-card h2  {
+        color: #00A3FF;
+        font-family: Poppins;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+    }
+    .writer-card p {
+        color: #2D2D2D;
+        font-family: Poppins;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+    .writer-card{
+        margin-bottom: 40px;
+    }
+
+    .acceptreview {
+        border-radius: 40px;
+        border: 1px solid #E6F6FF;
+        background: linear-gradient(93deg, #1067EA 0.18%, #9B60FA 100.18%);
+        color: var(--icon-color, #FFF);
+        text-align: center;
+        text-shadow: 0px 2.572px 2.572px rgba(0, 0, 0, 0.25);
+        font-family: Poppins;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 300;
+        line-height: normal;
+        width: 187px;
+        padding: 10px;
+        margin: auto;
+        margin-top: 20px;
+    }
+    .acceptreview:hover {
+        background: #1067EA;
+    }
+
+
+/* X-Small devices (portrait phones, less than 576px) */
+/* // No media query for `xs` since this is the default in Bootstrap */
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {  }
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {  }
+/* 
+// Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {  
+    .face-hi {
+        /* border: 1px solid red; */
+    }
+}
+
+@media (max-width: 992px) {  
+    .face-hi {
+        border-radius: 32px 32px 0px 0px;;
+    }
+    .signUp-hi {
+        border-radius: 0px 0px 32px 32px;
+    }
+}
+
+/* // X-Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {  }
+
+/* // XX-Large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {  }

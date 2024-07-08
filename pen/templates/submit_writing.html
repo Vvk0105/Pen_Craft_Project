@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 signUp-hi">
-                    <div class="signUp">
+                    <div class="signUp" style="margin-top: -8rem;">
                         <h2 style="margin-top: 200px;">Submit Writing</h2>
                         <form id="submitForm" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
@@ -68,7 +68,7 @@
                                 <div class="col-md-12">
                                     <label for="category" class="form-label">Choose the Category</label>
                                     <select class="form-control" id="category" name="category" required>
-                                        <option value="Literature-Story">Literature-Story</option>
+                                        <option value="Literature-Story">Story</option>
                                         <option value="Poem">Poem</option>
                                         <option value="Novel">Novel</option>
                                         <option value="Article">Article</option>
@@ -90,12 +90,13 @@
                                         <div id="file-name-box" class="file-box" onclick="document.getElementById('file').click()">
                                             Select file
                                         </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
                                     </div>
                                 </div>
                             
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            
                         </form>
                     </div>
                 </div>

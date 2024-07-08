@@ -161,7 +161,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="count-card green">
+                            <div class="count-card green" style="padding-top: 0px;">
                                 <h1>{{ article_count }}</h1>
                                 <h3 class="label">Articles</h3>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="44" viewBox="0 0 48 44" fill="none">
@@ -199,7 +199,7 @@
                     <div class="row">
                         <div class="col-md-12">
 
-                            <div class="chart-holder">
+                            <div class="chart-holder" style="padding-top: 30px;">
                                 <h2>Registerd users</h2>
                                 <div id="chart_div2"></div>
                             </div>
@@ -223,20 +223,24 @@
                                 <button type="button" class="btn btn-secondary" id="btn-article">Article</button>
                             </div>
                         </div>
-                        <div id="multi" class="ring-container"></div>
+                        <div id="radial-container">
+                            <div id="multi" class="ring-container"></div>
                         <div id="dynamic-content" class="ring-container">
-                            <h4>Approved Masters: {{ masters_approved }}</h4>
-                            <h4>Pending Requests: {{ masters_pending }}</h4>
-                            <h4>Masters Registered: {{ total_masters }}</h4>
+                            <h4 class="h4" style="color: #00A3FF; font-size: large;">Approved Masters: {{ masters_approved }}</h4>
+                            <h4 class="h4" style="color: #00A3FF; font-size: large;">Pending Requests: {{ masters_pending }}</h4>
+                            <h4 class="h4" style="color: #00A3FF; font-size: large;">Masters Registered: {{ total_masters }}</h4>
                         </div>
                     </div>
+                        </div>
+                        
                 </div>
                 
             </div>
         </div>
     </div>
 </section>
-
+<!-- Include the radial-progress.js library -->
+<script src="https://cdn.jsdelivr.net/npm/radial-progress-indicator/dist/radial-progress.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -245,18 +249,16 @@
 <script src="{% static 'js/radialMultiProgress.js' %}"></script>
 <script>
     $(document).ready(function() {
-
-        var masters_approved = {{ masters_approved }};
-        var masters_pending = {{ masters_pending }};
-        var total_masters = {{ total_masters }};
+        var masters_approved = {{ masters_approved|safe }};
+        var masters_pending = {{ masters_pending|safe }};
+        var total_masters = {{ total_masters|safe }};
 
         var article_submitted = 0;  
         var article_opened = 0;     
         var article_completed = 0;  
 
-    
-        function updateRadialProgress(approved, pending, total) {
-            // $("#multi").empty(); 
+        function initializeRadialProgress(approved, pending, total) {
+            console.log("Initializing radial progress with values:", approved, pending, total);
             $("#multi").radialMultiProgress({
                 thickness: 10,
                 space: 0,
@@ -270,15 +272,28 @@
             });
         }
 
-        // updateRadialProgress(masters_approved, masters_pending, total_masters);  
+        function updateRadialProgress(approved, pending, total) {
+            console.log("Updating radial progress with values:", approved, pending, total);
+            var instance = $("#multi").data('radialMultiProgress');
+            if (instance) {
+                instance.update([
+                    { id: 'approvedBar', color: "#c5dba4", range: [0, total], value: approved },
+                    { id: 'pendingBar', color: "#91e67e", range: [0, total], value: pending },
+                    { id: 'totalBar', color: "#96f051", range: [0, total], value: total },
+                ]);
+            } else {
+                initializeRadialProgress(approved, pending, total);
+            }
+        }
+
+        initializeRadialProgress(masters_approved, masters_pending, total_masters);     
 
         $('#btn-master').click(function() {
             $('#dynamic-content').html(`
-                <h4>Approved Masters: ${masters_approved}</h4>
-                <h4>Pending Requests: ${masters_pending}</h4>
-                <h4>Masters Registered: ${total_masters}</h4>
+                <h4 class="h4" style="color: #00A3FF; font-size: large;">Approved Masters: ${masters_approved}</h4>
+                <h4 class="h4" style="color: #00A3FF; font-size: large;">Pending Requests: ${masters_pending}</h4>
+                <h4 class="h4" style="color: #00A3FF; font-size: large;">Masters Registered: ${total_masters}</h4>
             `);
-            // Update radial progress with master data
             updateRadialProgress(masters_approved, masters_pending, total_masters);
         });
 
@@ -287,24 +302,23 @@
                 url: '{% url "get_article_counts" %}',
                 method: 'GET',
                 success: function(data) {
-                    // console.log("Received article data:", data);
+                    console.log("Received article data:", data);
                   
                     article_submitted = data.submitted_count;
                     article_opened = data.open_count;
                     article_completed = data.completed_count;
                     
-                    // console.log("Updated article counts:", article_submitted, article_opened, article_completed);
+                    console.log("Updated article counts:", article_submitted, article_opened, article_completed);
 
                     $('#dynamic-content').html(`
-                        <h4>Submitted Articles: ${article_submitted}</h4>
-                        <h4>Opened Articles: ${article_opened}</h4>
-                        <h4>Completed Articles: ${article_completed}</h4>
+                        <h4 class="h4" style="color: #00A3FF; font-size: large;">Submitted Articles: ${article_submitted}</h4>
+                        <h4 class="h4" style="color: #00A3FF; font-size: large;">Opened Articles: ${article_opened}</h4>
+                        <h4 class="h4" style="color: #00A3FF; font-size: large;">Completed Articles: ${article_completed}</h4>
                     `);
                     
                     updateRadialProgress(article_submitted, article_opened, article_submitted + article_opened + article_completed);
                 },
                 error: function(xhr, status, error) {
-                    // Handle error responses if needed
                     console.error("Error fetching article data:", error);
                 }
             });

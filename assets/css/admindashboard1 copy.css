@@ -1,0 +1,195 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+        overflow-x: hidden;
+     
+    }
+
+
+#Admin-nav{
+    background-color:#EFF9FE;
+}
+
+
+    .admin-logoutbox {
+        display: flex; /* Use flexbox to create a horizontal layout */
+        align-items: center; /* Align items vertically in the center */
+        border: 2px solid#00A3FF;
+        border-radius: 5rem;
+        height: 30px;
+        width: 100px;
+        padding-left: .8rem;
+        margin-top: 2rem;
+color: #00A3FF;
+    }
+    
+    .admin-logoutbox svg {
+        /* Optional: Adjust margin or padding for spacing between the icon and text */
+        margin-right: 8px; /* Adjust as needed */
+    }
+
+.admin-Logout-content{
+    margin-top: .4rem;
+
+}
+
+    .admin-Logout-content h3{
+        font-size: .8rem;
+        
+    }
+    
+
+    #dashboard {
+        height: 100vh; /* Set the section height to 100% of the viewport height */
+        display: flex; /* Use flexbox for layout */
+    }
+    
+    .row {
+        flex: 1; /* Make the row flex container to stretch to fill the section height */
+        display: flex; /* Nested flex container */
+
+    }
+    
+    .col-2 {
+        display: flex; /* Nested flex container */
+        flex-direction: column; /* Stack items vertically */
+    }
+    
+    .sidebar {
+        padding-top: 2rem;
+        background-color: #00518B;/* Example background color */
+    height: 100%;
+    overflow-y: auto;
+    transition: all 0.4s ease;/* Vertically center items */
+    color: #fff;
+    }
+    
+    .sidebar h3{
+        margin: 0; /* Remove default margin */
+        font-size: .8rem;
+        font-weight: 500;
+        padding-top: 1.5rem;
+        padding-left: .6rem;
+    }
+
+    .border{
+ margin-left: .5rem;
+ padding-top: .6rem;
+ text-align: center;
+        border: 1.5px solid #FFF;
+        border-radius: 5rem;
+        width: 90%;
+        margin-top: 1rem;
+    }
+
+    .border:hover{
+background-color: #00A3FF;
+    }
+
+    .border h5{
+
+    padding-left: .5rem;
+    font-size: .8rem;
+    font-weight: 300;
+    }
+    
+    #authorimg{
+        height:50px;
+        width:100px;
+    }
+
+    #authorimg img{
+        height:50px;
+        width:80px;
+    }
+    
+    .admintable-body td{
+         max-Width: 200px; 
+         word-wrap: break-word;
+         padding-right: 1.3rem;
+         padding-top: .5rem;
+         padding-bottom: .5rem;
+    }
+
+    .author-table{
+        border: 1px solid black;
+        padding: 1rem;
+    }
+
+    .author-search input{
+        border-radius: 20px;
+    padding-left: 1.5rem;
+    height: 40px;
+    width: 85%;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    
+
+    }
+
+    .author-search input:focus{
+        outline: none;
+    }
+
+    .pagecount{
+        display: flex;
+        margin-left: 4rem;
+        margin-top: .5rem;
+        
+    }
+
+    .pagecount h5{
+        font-size: .9rem;
+        margin-top: .5rem;
+    }
+    .pagecount select{
+        margin-left: 1rem;
+        border: none;
+    background-color:#d7f0fe;
+    
+    }
+
+    .pagecount select:focus{
+        outline: none;
+    }
+
+    .author-search {
+      
+    }
+
+    .author-search svg{
+       margin-left: -3rem;
+       margin-bottom: .2rem;
+    }
+
+    .author-container{
+        padding-top: 2rem;
+    }
+
+.pagination{
+    padding-left: 0;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+   
+.pagination li{
+padding: 0 .4rem;
+margin-right: .3rem;
+margin-left: .3rem;
+}
+
+ 
+.pageli:hover{
+background-color: #d7f0fe;
+border-radius: 100%;
+}
+
+#paginationlist{
+    border: 1px solid black;
+    border-radius: .3rem;
+}

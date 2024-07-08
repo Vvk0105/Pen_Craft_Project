@@ -6,13 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/admindashboard.css' %}" />
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <title>Master Details</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <style>
         table {
@@ -46,8 +42,7 @@
                 <div class="col-md-2">
                     <div class="admin-logoutbox">
                         <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24">
-                            <path fill="currentColor"
-                                d="M12 21v-2h7V5h-7V3h7q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm-2-4l-1.375-1.45l2.55-2.55H3v-2h8.175l-2.55-2.55L10 7l5 5z" />
+                            <path fill="currentColor" d="M12 21v-2h7V5h-7V3h7q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm-2-4l-1.375-1.45l2.55-2.55H3v-2h8.175l-2.55-2.55L10 7l5 5z" />
                         </svg>
                         {% if user.is_authenticated %}
                         <div class="icon">
@@ -57,7 +52,7 @@
                                 </a>
                             </div>
                         </div>
-                    {% endif %}
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -86,30 +81,27 @@
                         <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'submission_history' %}">Submission history ></a>
                     </div>
                     <div class="dashboard-box6 border">
-                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'view_complaints' %}">View Complaints > </a>
+                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'view_complaints' %}">View Complaints ></a>
                     </div>
                 </div>
             </div>
             <div class="col-md-10">
                 <div class="author-container">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="pagecount">
-                                <h5>Rows Per Page</h5>
-                                <select>
-                                    <option>1</option>
-                                </select>
-                            </div>
-                        </div>
+                        <div class="col-md-6"></div>
                         <div class="col-md-2"></div>
                         <div class="col-md-4">
                             <div class='author-search'>
-                                <input type='text' placeholder='Search here' />
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12" fill="#d7f0fe"/>
-                                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m16.893 16.92l3.08 3.08m-.889-8.419c0 4.187-3.383 7.581-7.555 7.581c-4.173 0-7.556-3.394-7.556-7.58C3.973 7.393 7.356 4 11.528 4c4.173 0 7.556 3.394 7.556 7.581"/>
-                                </svg>
-                            </div>       
+                                <form method="GET" action="{% url 'admin_master_view' %}">
+                                    <input type='text' name="q" placeholder='Search here' value="{{ request.GET.q }}">
+                                    <button type="submit" class="btn btn-light">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" viewBox="0 0 24 24">
+                                            <circle cx="12" cy="12" r="12" fill="#d7f0fe"/>
+                                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m16.893 16.92l3.08 3.08m-.889-8.419c0 4.187-3.383 7.581-7.555 7.581c-4.173 0-7.556-3.394-7.556-7.58C3.973 7.393 7.356 4 11.528 4c4.173 0 7.556 3.394 7.556 7.581"/>
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
 
@@ -138,7 +130,7 @@
                                 </tr>
                             </thead>
                             <tbody class="admintable-body">
-                                {% for master in data %}
+                                {% for master in page_obj %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
                                     <td id="authorimg">
@@ -161,15 +153,38 @@
                             </tbody>
                         </table>
 
-                        <ul class="pagination">
-                            <li id="paginationlist"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="m14 18l-6-6l6-6l1.4 1.4l-4.6 4.6l4.6 4.6z"/></svg></li>
-                            <li class="pageli">1</li>
-                            <li class="pageli">2</li>
-                            <li class="pageli">3</li>
-                            <li class="pageli">...</li>
-                            <li class="pageli">10</li>
-                            <li id="paginationlist"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M12.6 12L8 7.4L9.4 6l6 6l-6 6L8 16.6z"/></svg></li>
-                        </ul>
+                        <div class="pagination">
+                            <span class="step-links">
+                                {% if page_obj.has_previous %}
+                                    <a class="pageli" href="?page=1">
+                                        <!-- First -->
+                                    </a>
+                                    <a class="pageli" href="?page={{ page_obj.previous_page_number }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="m14 18l-6-6l6-6l1.4 1.4l-4.6 4.6l4.6 4.6z"/>
+                                        </svg>
+                                        <!-- Previous -->
+                                    </a>
+                                {% endif %}
+                        
+                                <span class="current">
+                                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                </span>
+                        
+                                {% if page_obj.has_next %}
+                                    <a class="pageli" href="?page={{ page_obj.next_page_number }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M12.6 12L8 7.4L9.4 6l6 6l-6 6L8 16.6z"/>
+                                        </svg>
+                                        <!-- Next -->
+                                    </a>
+                                    <a class="pageli" href="?page={{ page_obj.paginator.num_pages }}">
+                                        <!-- Last -->
+                                    </a>
+                                {% endif %}
+                            </span>
+                        </div>
+
                     </div>
                 </div>
             </div>

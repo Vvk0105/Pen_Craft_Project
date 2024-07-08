@@ -1,0 +1,65 @@
+/* styles.css */
+
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+}
+
+header {
+    background: #007bff;
+    color: white;
+}
+
+header .nav-link {
+    color: white !important;
+}
+
+.hero {
+    background: #f8f9fa;
+    padding: 3rem 0;
+}
+
+.hero img {
+    max-width: 100%;
+    height: auto;
+}
+
+.better-writing,
+.plagiarism-grammar,
+.how-it-helps,
+.start-journey,
+.match-mentor,
+.contact-us {
+    padding: 3rem 0;
+}
+
+.card {
+    border: none;
+}
+
+.card img {
+    border-radius: 50%;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+footer {
+    background: #343a40;
+    color: white;
+    padding: 1rem 0;
+}
+
+footer p {
+    margin: 0.5rem 0;
+}
+
+.contact-us form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+

@@ -5,16 +5,10 @@
     <title>Master Chat</title>
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
     <link rel="stylesheet" href="{% static 'css/chatwith.css' %}">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
 <style>
     body {
@@ -29,9 +23,19 @@
         height: 100%;
         /* overflow-y: auto; */
     }   
-
-    #dashboard{
+    #dashboard {
         margin-left: -12px;
+    }
+    .centered-content {
+        font-family: 'Poppins';
+        text-align: center;
+        border: none;
+        margin-top: 20px; /* Adjust as needed */
+    }
+    .centered-content svg {
+        display: block;
+        margin: 0 auto;
+        margin-top: 10px; /* Adjust as needed */
     }
 </style>
 <body>
@@ -117,7 +121,7 @@
                 <div class="sidebar">
                     {% if users %}
                         {% for user in users %}
-                            <li class="flex-user-wrap">
+                            <li class="flex-user-wrap half-line-container">
                                 <img class="img-fluid" src="{{ user.image.url }}" alt="">
                                 <a href="?user_id={{ user.id }}">{{ user.user.username }}</a>
                             </li>
@@ -127,48 +131,48 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="chat-display col-9">
-                <div class="chat-hold" style="height: 618px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
-                    <div>
+            <div class="chat-display col-9" style="overflow: hidden;">
+                {% if selected_user %}
+                <div id="chat-container" class="chat-hold" style="height: 537px; overflow-y: auto; border: 1px solid #ccc; padding: 0px; position: relative;">
+                    <div class="chat-top" style="position: sticky; top: 0; background-color: #fff; border-bottom: 1px solid #ccc; padding: 10px;">
+                        <a href="{% url 'home' %}" class="" style="position: absolute; top: 12px; left: 10px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="47" height="47" viewBox="0 0 47 47" fill="none">
+                                <path d="M21.4704 35.5508L10.6271 24.7156C10.4297 24.5095 10.2749 24.2664 10.1716 24.0003C9.95462 23.4726 9.9544 22.8806 10.171 22.3528C10.2741 22.0866 10.4287 21.8435 10.626 21.6372L21.4613 10.794C21.6633 10.5918 21.9032 10.4313 22.1673 10.3218C22.4313 10.2124 22.7143 10.1559 23.0002 10.1558C23.5775 10.1556 24.1312 10.3848 24.5396 10.7928C24.948 11.2009 25.1775 11.7545 25.1777 12.3318C25.1779 12.9091 24.9488 13.4628 24.5407 13.8712L17.3895 21.006L33.8434 21C34.4184 20.9997 34.9699 21.2279 35.3766 21.6343C35.7833 22.0407 36.0119 22.5921 36.0121 23.167C36.0123 23.742 35.7841 24.2934 35.3777 24.7001C34.9713 25.1068 34.42 25.3354 33.845 25.3357L17.3911 25.3417L24.5476 32.4713C24.7509 32.6728 24.9122 32.9125 25.0224 33.1766C25.1325 33.4407 25.1893 33.7241 25.1894 34.0102C25.1895 34.2964 25.133 34.5798 25.023 34.844C24.913 35.1082 24.7519 35.348 24.5487 35.5497C24.3473 35.7529 24.1076 35.9143 23.8435 36.0244C23.5793 36.1346 23.296 36.1914 23.0098 36.1915C22.7236 36.1916 22.4403 36.135 22.176 36.0251C21.9118 35.9151 21.672 35.7539 21.4704 35.5508Z" fill="#2D2D2D"/>
+                            </svg>
+                        </a>
+                            <img src="{{ selected_user.image.url }}" alt="" class="rounded-circle" style="width: 50px; height: 50px; margin-left: 60px;">
+                        <h3 class="chat-username" style="display: inline-block; margin-left: 5px; font-weight: 400; font-size: x-large;">{{ selected_user.user.username }}</h3>
+                    </div>
+                    <div style="padding: 15px 30px;">
                         {% if messages %}
                             {% for message in messages %}
                                 <div>
-                                    {% if message.sender_master.username %}
+                                    {% if message.sender_user %}
+                                        <!-- <small class="sender">{{ message.timestamp|time:"g:iA" }}</small><br> -->
                                         <strong class="sender">{{ message.message }}</strong>
                                         <div class="clearfix"></div>
                                     {% else %}
-                                        <strong>{{ message.message }}</strong>
+                                        <!-- <small class="receiver">{{ message.timestamp|time:"g:iA" }}</small><br> -->
+                                        <strong class="receiver">{{ message.message }}</strong>
                                     {% endif %}
                                 </div>
                             {% endfor %}
                         {% else %}
-                            <div style="text-align: center; padding-top: 25%;">No messages available.</div>
+                            <div class="no-messages" style="text-align: center; padding-top: 15%;">
+                                <div style="margin-bottom: 20px;">
+                                    <img src="{{ selected_master.img.url }}" alt="" class="rounded-circle" style="width: 100px; height: 100px;">
+                                </div>
+                                <h5>{{ selected_master.username }}</h5>
+                                <p>{{ selected_master.email }}</p>
+                                <!-- Additional text or elements if needed -->
+                            </div>
                         {% endif %}
                     </div>
                 </div>
-                
-                <!-- {% if selected_user %}
-                    <h3>Chat with {{ selected_user.user.username }}</h3>
-                    <div class="messages">
-                        {% for message in messages %}
-                            <div class="{% if message.sender_master == master %}sent{% else %}received{% endif %}">
-                                <strong>
-                                    {% if message.sender_user %}
-                                        {{ message.sender_user.user.username }}
-                                    {% else %}
-                                        {{ message.sender_master.username }}
-                                    {% endif %}
-                                </strong>: {{ message.message }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <p>No conversations yet</p>
-                {% endif %} -->
-                <form method="post" class="chat-box" action="{% url 'send_message' %}">
+                <form method="post" class="chat-box" action="{% url 'send_message' %}" style="margin-bottom: 25px;">
                     {% csrf_token %}
                     <input type="hidden" name="receiver_user_id" value="{{ selected_user.id }}">
-                    <input type="text" name="message" placeholder="Type a message" style="flex: 1; padding: 10px 15px; border-radius: 25px; outline: none; font-size: 14px;width: 140vh;">
+                    <input type="text" name="message" placeholder="Type a message" style="flex: 1; padding: 8px 15px; border-radius: 25px; outline: none; font-size: 14px;width: 140vh; border: 3px solid rgb(0,0,0,0.20);">
                     <button type="submit" style="background: transparent; border: none; padding: 0;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
                             <path d="M29.8363 15.0521L1.24498 0.717144C1.12877 0.659039 0.995465 0.645367 0.869 0.676129C0.578473 0.747906 0.39732 1.04185 0.469097 1.3358L3.41539 13.3739C3.45982 13.555 3.59312 13.702 3.77085 13.7601L8.81919 15.493L3.77427 17.2259C3.59654 17.2875 3.46324 17.431 3.42222 17.6122L0.469097 29.6673C0.438336 29.7938 0.452008 29.9271 0.510113 30.0399C0.643414 30.3099 0.971539 30.4193 1.24498 30.286L29.8363 16.0331C29.9422 15.9818 30.0277 15.8929 30.0824 15.7904C30.2157 15.5169 30.1063 15.1888 29.8363 15.0521ZM3.83921 26.2425L5.55845 19.2152L15.6483 15.7528C15.7269 15.7254 15.7918 15.6639 15.8192 15.5819C15.867 15.4383 15.7918 15.2845 15.6483 15.2333L5.55845 11.7743L3.84605 4.77427L25.3109 15.5375L3.83921 26.2425Z" fill="#2D2D2D"/>
@@ -176,7 +180,31 @@
                     </button>
                 </form>
             </div>
+            {% else %}
+            <div style="font-family: Poppins; text-align: center; border: none; padding-top: 20%;">
+                <p style="margin: 0;">Select a chat to start messaging</p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="41" height="40" viewBox="0 0 41 40" fill="none" style="display: block; margin: 0 auto; margin-top: 10px;">
+                    <path d="M11.5 12H27.5M11.5 20H23.5M19.48 31.212L11.5 36V30H7.5C5.9087 30 4.38258 29.3679 3.25736 28.2426C2.13214 27.1174 1.5 25.5913 1.5 24V8C1.5 6.4087 2.13214 4.88258 3.25736 3.75736C4.38258 2.63214 5.9087 2 7.5 2H31.5C33.0913 2 34.6174 2.63214 35.7426 3.75736C36.8679 4.88258 37.5 6.4087 37.5 8V19M33.5 38V26M33.5 26L39.5 32M33.5 26L27.5 32" stroke="#2D2D2D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            
+        {% endif %}
         </div>
     </div>
+
+    <script>
+        // Function to scroll to the bottom of the chat container
+        function scrollToBottom() {
+            var chatContainer = document.getElementById("chat-container");
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    
+        // Call the function to scroll to the bottom when the page loads
+        window.onload = scrollToBottom;
+    
+        // Optional: Call the function when new messages are added
+        // Assuming you have some mechanism to detect new messages
+        // For example, if using AJAX to load new messages, call scrollToBottom() after updating the DOM
+    </script>
 </body>
 </html>
