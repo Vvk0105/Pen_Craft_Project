@@ -43,7 +43,7 @@
                         {% if user.is_authenticated %}
                         <div class="icon">
                             <div class="admin-Logout-content">
-                                <a href="{% url 'logout' %}">
+                                <a href="{% url 'logout' %}" style="text-decoration: none;">
                                     <h3>Logout</h3>
                                 </a>
                             </div>
@@ -60,25 +60,28 @@
             <div class="col-md-2">
                 <div class="sidebar">
                     <div class="dashboard-box1 border">
-                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'admin_dashboard' %}">Dashboard ></a>
+                        <a style="text-decoration: none; color: white; font-weight: 500; font-size: 12px;" href="{% url 'admin_dashboard' %}">Dashboard ></a>
                     </div>
                     <h3>Master Writers</h3>
                     <div class="dashboard-box2 border">
-                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'admin_master_view' %}">View request ></a>
+                        <a style="text-decoration: none; color: white; font-weight: 500; font-size: 12px;" href="{% url 'admin_master_view' %}">View request ></a>
                     </div>
                     <div class="dashboard-box3 border">
-                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'all_master' %}">All master writers ></a>
+                        <a style="text-decoration: none; color: white; font-weight: 500; font-size: 12px;" href="{% url 'all_master' %}">All master writers ></a>
                     </div>
                 
                     <h3>Users</h3>
                     <div class="dashboard-box4 border">
-                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'all_writters' %}">View authors ></a>
+                        <a style="text-decoration: none; color: white; font-weight: 500; font-size: 12px;" href="{% url 'all_writters' %}">View authors ></a>
                     </div>
                     <div class="dashboard-box5 border">
-                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'submission_history' %}">Submission history ></a>
+                        <a style="text-decoration: none; color: white; font-weight: 500; font-size: 12px;" href="{% url 'submission_history' %}">Submission history ></a>
                     </div>
                     <div class="dashboard-box6 border">
-                        <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'view_complaints' %}">View Complaints > </a>
+                        <a style="text-decoration: none; color: white; font-weight: 500; font-size: 12px;" href="{% url 'view_complaints' %}">View Complaints > </a>
+                    </div>
+                    <div class="dashboard-box6 border">
+                        <a style="text-decoration: none; color: white; font-weight: 500; font-size: 12px;" href="{% url 'enquiries' %}">View Enquiries > </a>
                     </div>
                 </div>
             </div>
@@ -110,7 +113,7 @@
                     </div>
 
                     <div class="admin-author-table">
-                        <table class="mt-3">
+                        <table class="mt-3" style="text-align: center;">
                             <colgroup>
                                 <col style="width: 10%">
                                 <col style="width: 10%">

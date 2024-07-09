@@ -29,7 +29,10 @@ from django.contrib import messages
 from .forms import ComplaintForm
 from django.utils import timezone
 from django.db.models import Count
-
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
+from django.contrib.admin.views.decorators import staff_member_required
+from .decorators import user_is_staff, user_is_not_staff, user_is_superuser
 
 # Initialize tools
 spell = SpellChecker()
@@ -166,7 +169,7 @@ def check_content(request, submission_id):
 def read_file_content(request, submission_id):
     submission = get_object_or_404(WritingSubmission, id=submission_id)
     file_path = submission.file.path
-    submission.status = 'opened and under review'  # Make sure 'opened' is a valid choice in your model
+    submission.status = 'opened and under review' 
     submission.save()
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
@@ -182,12 +185,12 @@ def delete_submission(request, submission_id):
     return render(request, 'delete_confirmation.html', {'submission': submission})
 
 
-@login_required
+@user_is_not_staff
 def submission_status(request):
     submissions = WritingSubmission.objects.filter(user=request.user)
     return render(request, 'submission_status.html', {'submissions': submissions})
 
-@login_required
+@user_is_staff
 def reject_submission(request, submission_id):
     submission = get_object_or_404(WritingSubmission, id=submission_id)
     submission.status = 'rejected'
@@ -210,8 +213,10 @@ def reject_submission(request, submission_id):
 
 
 
-
+def is_staff(user):
+    return user.is_staff
 @login_required(login_url='login')
+@user_passes_test(is_staff)
 def HomePage(request):
     return render(request, 'home.html')
 
@@ -350,10 +355,6 @@ def coReg(request):
             messages.error(request, "Phone number must be exactly 10 digits.")
             return render('coReg')
 
-        if not img:
-            messages.error(request, 'Image is required. Please select an image to upload.')
-            return redirect('coReg')
-
         usr = User.objects.create_user(
             username=username, password=password, is_active=False, is_staff=True)
         usr.save()
@@ -365,6 +366,10 @@ def coReg(request):
         
 
     return render(request, 'coReg.html')
+
+def error_page(request):
+    message = request.GET.get('message', 'You do not have permission to view this page.')
+    return render(request, 'error_page.html', {'message': message})
 
 def password_reset_request(request):
     error_message = None
@@ -395,6 +400,8 @@ def reset_password(request, username):
     
     return render(request, 'reset_password.html', {'username': username, 'error_message': error_message})
 
+@login_required(login_url='login')
+
 def home_view(request):
     top_feedbacks = FeedbackDetails.objects.order_by('-total_mark')[:3]
     msg = ''
@@ -403,6 +410,13 @@ def home_view(request):
 def about(request):
     return render(request,'about.html')
 
+def aboutlanding(request):
+    return render(request,'aboutlanding.html')
+
+def get_submission_content(request, submission_id):
+    submission = get_object_or_404(WritingSubmission, id=submission_id)
+    content = submission.file.read()  # Assuming file is a FileField
+    return JsonResponse({'content': content.decode('utf-8')})
 
 
 def adminmaster(request):
@@ -419,7 +433,7 @@ def approvemaster(request):
     data.save()
     return redirect("admin_master_view")
 
-@login_required
+@user_is_not_staff
 def submit_writing(request):
     if request.method == 'POST':
         category = request.POST.get('category')
@@ -437,6 +451,7 @@ def submit_writing(request):
                 status='submitted'  
             )
             submission.save()
+            messages.success(request, 'Writing submitted scessfully.')
             return redirect('home')  
         else:
             return render(request, 'submit_writing.html', {'error': 'All fields are required.'})
@@ -444,7 +459,10 @@ def submit_writing(request):
     return render(request, 'submit_writing.html')
 
 
+def is_admin(user):
+    return user.is_authenticated and user.is_superuser
 @login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
 def admin_master_view(request):
     msg = ''
     query = request.GET.get('q')
@@ -462,9 +480,12 @@ def admin_master_view(request):
     return render(request, 'master_view_request.html', {"page_obj": page_obj, "msg": msg})
 
 
+def is_admin(user):
+    return user.is_authenticated and user.is_superuser
 @login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
 def all_master(request):
-    msg = ''
+    msg = 'Only admin can access this page'
     query = request.GET.get('q')
     
     if query:
@@ -478,7 +499,10 @@ def all_master(request):
     
     return render(request, 'all_master.html', {"page_obj": page_obj, "msg": msg, "query": query})
 
+def is_admin(user):
+    return user.is_authenticated and user.is_superuser
 @login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
 def all_writters(request):
     msg = ''
     query = request.GET.get('q')
@@ -494,10 +518,17 @@ def all_writters(request):
     
     return render(request, 'all_writters.html', {"page_obj": page_obj, "msg": msg, "query": query})
 
+def is_admin(user):
+    return user.is_authenticated and user.is_superuser
 @login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
 def admin_dashboard(request):
     return render(request,'admin_dashboard.html')
 
+def is_admin(user):
+    return user.is_authenticated and user.is_superuser
+@login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
 def delete_master(request, master_id):
     master = get_object_or_404(Master, id=master_id)
     master.delete()
@@ -515,6 +546,7 @@ def is_staff(user):
 @login_required(login_url='login')
 @user_passes_test(is_staff)
 
+@user_is_staff
 def view_submissions(request):
     # Get the current user
     user = request.user
@@ -554,18 +586,19 @@ def view_submissions(request):
 
 #accept 
 # @login_required(login_url='login')    
+@login_required(login_url='login')
 def accept_submission(request, submission_id):
     submission = get_object_or_404(WritingSubmission, id=submission_id)
     submission.status = 'open'  # Update status to 'open' when accepted
     submission.save()
     return redirect('submission_status')
 
-
+@login_required(login_url='login')
 def evaluation_page(request):
     accepted_submissions = WritingSubmission.objects.filter(is_accepted=True)
     return render(request, 'evaluation.html', {'submissions': accepted_submissions})
 
-@login_required
+@login_required(login_url='login')
 def save_feedback(request, submission_id):
     if request.method == 'POST':
         submission = get_object_or_404(WritingSubmission, id=submission_id)
@@ -591,11 +624,12 @@ def save_feedback(request, submission_id):
             total_mark=total_mark,  # Do not add master mark again
             reviewed_by=reviewed_by
         )
+        messages.success(request, 'Feedback submitted successfully!')
         return redirect('home')  # Change to the appropriate redirect URL
 
     return redirect('home')
 
-
+@login_required(login_url='login')
 def submission_history(request):
     # Fetch all submissions and prefetch the related feedback details
     submissions = WritingSubmission.objects.prefetch_related('feedbackdetails_set').all()
@@ -606,6 +640,7 @@ def submission_history(request):
     
     return render(request, 'submission_history.html', context)
 
+@user_is_staff
 def master_sub_hist(request):
     # Ensure the user is authenticated and is a master
     if not request.user.is_authenticated or not hasattr(request.user, 'master'):
@@ -634,7 +669,7 @@ def master_sub_hist(request):
 #     }
     
 #     return render(request, 'master_sub_hist.html', context)
-
+@user_is_not_staff
 def subm_his_user(request):
     # Ensure the user is authenticated
     if not request.user.is_authenticated:
@@ -649,7 +684,7 @@ def subm_his_user(request):
     
     return render(request, 'subm_his_user.html', context)
 
-@login_required
+@user_is_not_staff
 def profile(request):
     user_reg = UserReg.objects.get(user=request.user)
     context = {
@@ -658,6 +693,7 @@ def profile(request):
     }
     return render(request, 'profile.html', context)
 
+@user_is_not_staff
 def edit_profile(request):
     user_reg = UserReg.objects.get(user=request.user)
     
@@ -698,7 +734,7 @@ def edit_profile(request):
     
     return render(request, 'editprofile.html', context)
 
-@login_required
+@user_is_staff
 def master_profile(request):
     if not request.user.is_authenticated:
         return redirect('login') 
@@ -713,7 +749,7 @@ def master_profile(request):
     else:
         return redirect('profile')
 
-@login_required
+@user_is_staff
 def edit_master_profile(request):
     if not request.user.is_authenticated:
         return redirect('login')  # Redirect to login if the user is not authenticated
@@ -741,7 +777,7 @@ def edit_master_profile(request):
         return redirect('profile')
     
 
-@login_required
+@user_is_not_staff
 def submit_complaint(request):
     if request.method == 'POST':
         form = ComplaintForm(request.POST)
@@ -749,12 +785,13 @@ def submit_complaint(request):
             complaint = form.save(commit=False)
             complaint.user = request.user
             complaint.save()
+            messages.success(request, 'Submitted Successfully')
             return redirect('home')  # Change 'home' to whatever page you want to redirect to
     else:
         form = ComplaintForm()
     return render(request, 'submit_complaint.html', {'form': form})
 
-@login_required
+@user_is_superuser
 def view_complaints(request):
     complaints = Complaint.objects.all()
     msg = ''
@@ -770,6 +807,7 @@ def view_complaints(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'view_complaints.html', {'page_obj':page_obj})
 
+@user_is_not_staff
 def view_masters(request):
     msg = ''
     query = request.GET.get('q')
@@ -785,10 +823,24 @@ def view_masters(request):
     datas = Master.objects.all()
     return render(request, 'view_masters.html', {"page_obj": page_obj, "msg": msg})
 
-def     enquiries(request):
+def is_admin(user):
+    return user.is_authenticated and user.is_superuser
+@login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
+def enquiries(request):
     msg = ''
-    datas = ContactFormSubmission.objects.all()
-    return render(request, 'enquiries.html', {"datas": datas, "msg": msg})
+    query = request.GET.get('q')
+
+    if query:
+        datas = ContactFormSubmission.objects.filter(username__icontains=query)
+    else:
+        datas = ContactFormSubmission.objects.all()
+
+    paginator = Paginator(datas, 7)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'enquiries.html', {"page_obj": page_obj, "msg": msg, "query": query})  
+
 
 def contact_view(request):
     if request.method == 'POST':
@@ -806,12 +858,12 @@ def contact_view(request):
         )
         
         messages.success(request, 'Your message has been sent!')
-        return redirect('contact')  # Redirect to the same contact page or another page
+        return redirect('index')  # Redirect to the same contact page or another page
     
     return render(request, 'landing_page.html')
 
 
-@login_required
+@login_required(login_url='login')
 def admin_dashboard(request):
     # Get the total count of Master and UserReg
     total_masters = Master.objects.count()
@@ -831,7 +883,10 @@ def admin_dashboard(request):
     
     return render(request, 'admin_dashboard.html', context)
 
-@login_required
+def is_admin(user):
+    return user.is_authenticated and user.is_superuser
+@login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
 def admin_dashboard(request):
     total_masters = Master.objects.count()
     total_users = UserReg.objects.count()
@@ -869,6 +924,8 @@ def get_article_counts(request):
 
 
 #chat
+
+@user_is_not_staff
 def user_chat(request):
     masters = Master.objects.all()
     selected_master = None
@@ -887,9 +944,10 @@ def user_chat(request):
         'messages': messages,
     }
     return render(request, 'userchat.html', context)
+
 from django.db.models import Q
 
-@login_required
+@user_is_staff
 def master_chat(request):
     master = get_object_or_404(Master, user=request.user)  # Get the Master object for the logged-in user
     # Get users who have sent messages to the master
@@ -940,7 +998,8 @@ def send_message(request):
     # Handle the case where the request method is not POST
     return redirect('user_chat')
 
-
+class MyProtectedView(LoginRequiredMixin, TemplateView):
+    template_name = 'my_protected_page.html'
 
 
 
@@ -966,4 +1025,4 @@ def send_message(request):
 @login_required(login_url='login')
 def LogoutPage(request):
     logout(request)
-    return redirect('login')
+    return redirect('index')

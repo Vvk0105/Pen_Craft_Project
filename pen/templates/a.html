@@ -1,0 +1,29 @@
+$('#dynamic-content').html(`
+                        <h4 class="h4" style="color: #00A3FF; font-size: large;">Submitted Articles: ${article_submitted}</h4>
+                        <h4 class="h4" style="color: #00A3FF; font-size: large;">Opened Articles: ${article_opened}</h4>
+                        <h4 class="h4" style="color: #00A3FF; font-size: large;">Completed Articles: ${article_completed}</h4>
+                    `);
+
+
+
+
+            <div id="dynamic-content" class="ring-container" style="margin-left: 4rem;">
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#FF3200"/>
+                    </svg>
+                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px;">Submitted Articles: ${article_submitted}</h4>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#00CC9B"/>
+                    </svg>
+                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px;">Opened Articles: ${article_opened}</h4>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#003FFF"/>
+                    </svg>
+                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px;">Completed Articles: ${article_completed}</h4>
+                </div>
+            </div>

@@ -18,17 +18,32 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 </head>
-
+<style>
+    .alert {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1050;
+        }
+</style>
 <body>
-
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
     <nav id='common-home-navbar' class="navbar bg-body-tertiary">
         <div class="container-fluid appname">
+        <a href="{% url 'index' %}">
             <img src="{% static 'images/Group 9.png' %}">
+        </a>
             <form class="d-flex usernav-links" role="search">
                 {% if user.is_authenticated %}
                 <p><a href="{% url 'home' %}">Home</a></p>
                 {% else %}
-                <p><a href="{% url '' %}">Home</a></p>
+                <p><a href="{% url 'index' %}">Home</a></p>
                 {% endif %}
                 <p><a href="{% url 'about' %}">About Us</a></p>
 
@@ -230,7 +245,9 @@
 
                         </div>
                         <div class="readmore spclhead">
-                            <h4>Read More </h4>
+                            <a href="#" class="read-more-btn" data-submission-id="{{ feedback.submission.id }}" style="text-decoration: none;">
+                                <h4>Read More</h4>
+                            </a>
                         </div>
     
                         <div class="card-marks">
@@ -360,6 +377,46 @@
    
         
     </div>
+
+    <div class="modal fade" id="readMoreModal" tabindex="-1" aria-labelledby="readMoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="readMoreModalLabel">Submission Content</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalContent">
+              <!-- Content will be loaded here -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const readMoreButtons = document.querySelectorAll('.read-more-btn');
+        
+            readMoreButtons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const submissionId = this.getAttribute('data-submission-id');
+        
+                    fetch(`/get-submission-content/${submissionId}/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('modalContent').innerHTML = data.content;
+                            const readMoreModal = new bootstrap.Modal(document.getElementById('readMoreModal'));
+                            readMoreModal.show();
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
+            });
+        });
+        </script>
+        
+    
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const links = document.querySelectorAll('a[href^="#"]');
@@ -377,6 +434,12 @@
                     });
                 });
             }
+        });
+
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 1000); // 3 seconds
         });
     </script>
 </body>

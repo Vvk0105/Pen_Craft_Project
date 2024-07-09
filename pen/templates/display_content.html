@@ -135,7 +135,7 @@ textarea.form-control {
                 <div class="col-md-12 text-center">
                     <form action="{% url 'reject_submission' submission_id=submission_id %}" method="post" style="display:inline;">
                         {% csrf_token %}
-                        <button class="btn" type="submit" style="display: flex;margin-left: auto;">Reject</button>
+                        <button class="btn btn-danger" type="submit" style="display: flex;margin-left: auto;">Reject</button>
                     </form>
                 </div>
             </div>

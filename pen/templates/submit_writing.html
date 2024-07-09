@@ -68,7 +68,7 @@
                                 <div class="col-md-12">
                                     <label for="category" class="form-label">Choose the Category</label>
                                     <select class="form-control" id="category" name="category" required>
-                                        <option value="Literature-Story">Story</option>
+                                        <option value="Story">Story</option>
                                         <option value="Poem">Poem</option>
                                         <option value="Novel">Novel</option>
                                         <option value="Article">Article</option>
@@ -86,9 +86,9 @@
                                 <div class="container">
                                     <div class="col-md-12">
                                         <label for="file" class="form-label">Upload the File</label>
-                                        <input type="file" id="file" class="file-input" name="file" onchange="updateFileName()">
+                                        <input type="file" id="file" class="file-input" name="file" accept=".txt" onchange="updateFileName()">
                                         <div id="file-name-box" class="file-box" onclick="document.getElementById('file').click()">
-                                            Select file
+                                            Select a .txt file
                                         </div>
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </div>

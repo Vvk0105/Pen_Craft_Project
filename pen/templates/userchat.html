@@ -38,7 +38,7 @@
                 {% if user.is_authenticated %}
                 <p><a href="{% url 'home' %}">Home</a></p>
                 {% else %}
-                <p><a href="{% url '' %}">Home</a></p>
+                <p><a href="{% url 'index' %}">Home</a></p>
                 {% endif %}
                 <p><a href="{% url 'about' %}">About Us</a></p>
 
@@ -157,7 +157,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <form method="post" class="chat-box" action="{% url 'send_message' %}" >
+                <form method="post" class="chat-box" action="{% url 'send_message' %}" style="margin-bottom: 0px;">
                     {% csrf_token %}
                     <input type="hidden" name="receiver_master_id" value="{{ selected_master.id }}">
                     <input type="text" name="message" placeholder="Type a message" style="flex: 1; padding: 7px 15px; border-radius: 25px; outline: none; font-size: 14px;width: 140vh; border: 3px solid rgb(0,0,0,0.20); margin-bottom: 14px;">

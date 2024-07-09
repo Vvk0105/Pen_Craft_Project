@@ -28,7 +28,7 @@
             
             <div class="card-header d-flex justify-content-between align-items-center" style="background: #00518B; color: white;">
                 <h2>Edit Profile</h2>
-                <button onclick="history.back()" class="btn-danger btn-sm" style="color: white;">✖</button>
+                <a href="{% url 'home' %}"><button onclick="history.back()" class="btn-danger btn-sm" style="color: white;">✖</button></a>
             </div>
             <div class="card-body">
                 <form method="post" action="" enctype="multipart/form-data">
@@ -67,7 +67,13 @@
                         <label for="img">Profile Image:</label>
                         <input type="file" id="img" name="img">
                     </div>
-                    <button type="submit" class="btn">Update</button>
+                    <button type="submit" class="btn" style="display: flex;
+                    width: 270px;
+                    height: 55px;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 19.931px;
+                    margin-left: 38%;">Update</button>
                 </form>
             </div>
         </div>

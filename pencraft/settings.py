@@ -61,6 +61,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'pen.middleware.NoCacheMiddleware',
+    'pen.middleware.HandleTemplateDoesNotExistMiddleware',
+    'pen.middleware.StaffRequiredMiddleware',
+    'pen.middleware.UserRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'pencraft.urls'

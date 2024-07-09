@@ -7,6 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
     <link rel="stylesheet" href="{% static 'css/admindashboard.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
@@ -48,179 +59,153 @@
                 {% else %}
                 <p><a href="{% url '' %}">Home</a></p>
                 {% endif %}
-                <p><a href="">About Us</a></p>
+                <p><a href="{% url 'about' %}">About Us</a></p>
 
                 {% if user.is_staff %}
                 <div class="dropdown">
                     <p class="">Submission</p>
                     <div class="dropdown-content">
-                      <a href="{% url 'view_submissions' %}">Review submission</a>
-                      <a href="{% url 'master_sub_hist' %}">Submission history</a>
+                        <a href="{% url 'view_submissions' %}">Review submission</a>
+                        <a href="{% url 'master_sub_hist' %}">Submission history</a>
                     </div>
                 </div>
                 {% else %}
                 <div class="dropdown">
                     <p class="">Submission</p>
                     <div class="dropdown-content">
-                      <a href="{% url 'submission_status' %}">Track submission</a>
-                      <a href="{% url 'subm_his_user' %}">View submission history</a>
+                        <a href="{% url 'submission_status' %}">Track submission</a>
+                        <a href="{% url 'subm_his_user' %}">View submission history</a>
                     </div>
                 </div>
                 <p><a href="{% url 'view_masters' %}">Master Writers</a></p>
                 <p><a href="{% url 'submit_writing' %}">Check Document</a></p>
                 <p><a class="nav-link" href="{% url 'submit_complaint' %}">Add Complaint</a></p>
                 {% endif %}
-                
+
                 {% if user.is_staff %}
-                <p><a  class="nav-link" href="{% url 'master_chat' %}">Chat</a></p>
+                <p><a class="nav-link" href="{% url 'master_chat' %}">Chat</a></p>
                 {% else %}
                 <p><a class="nav-link" href="{% url 'user_chat' %}">Chat</a></p>
                 {% endif %}
-                <!-- <p><a href="">Contact Us</a></p> -->
-            </form>    
+            </form>
             {% if user.is_authenticated %}
-                <div class="dropdown">
-                    <a class="" type="button" id="" data-bs-toggle="dropdown" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="37" viewBox="0 0 36 37" fill="none">
-                            <path d="M6 27.9512C6 26.3599 6.63214 24.8337 7.75736 23.7085C8.88258 22.5833 10.4087 21.9512 12 21.9512H24C25.5913 21.9512 27.1174 22.5833 28.2426 23.7085C29.3679 24.8337 30 26.3599 30 27.9512C30 28.7468 29.6839 29.5099 29.1213 30.0725C28.5587 30.6351 27.7956 30.9512 27 30.9512H9C8.20435 30.9512 7.44129 30.6351 6.87868 30.0725C6.31607 29.5099 6 28.7468 6 27.9512Z" stroke="#2D2D2D" stroke-width="3" stroke-linejoin="round"/>
-                            <path d="M18 15.9512C20.4853 15.9512 22.5 13.9365 22.5 11.4512C22.5 8.96589 20.4853 6.95117 18 6.95117C15.5147 6.95117 13.5 8.96589 13.5 11.4512C13.5 13.9365 15.5147 15.9512 18 15.9512Z" stroke="#2D2D2D" stroke-width="3"/>
-                            </svg>
-                        </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="text-align: center;">
-                        {% if user.userreg_set.exists %}
-                            <!-- If User is a registered user -->
-                            <!-- <li><a class="dropdown-item" href="{% url 'profile' %}" style="text-align: left;">Profile</a></li> -->
-                        {% elif user.is_staff %}
-                            <!-- If User is a master -->
-                            <form action="{% url 'master_profile' %}" method="post" class="">
-                                {% csrf_token %}
-                            <li><button class="btn btn-link" href="" style="text-decoration: none; color: black; text-align: left;">Profile</button></li>
-                            </form>
-                        {% else %}
-                            <!-- Handle cases where user type is unknown -->
-                            <form action="{% url 'profile' %}" method="post" class="">
-                                {% csrf_token %}
-                            <li><button class="btn btn-link" href="" style="text-decoration: none; color: black; text-align: left;">Profile</button></li>
-                            </form>
-                        {% endif %}
-                        <li>
-                            <form action="{% url 'logout' %}" method="post" class="">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-link" style="text-decoration: none; color: black; text-align: left;">Logout</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+            <div class="dropdown">
+                <a class="" type="button" id="" data-bs-toggle="dropdown" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="37" viewBox="0 0 36 37" fill="none">
+                        <path d="M6 27.9512C6 26.3599 6.63214 24.8337 7.75736 23.7085C8.88258 22.5833 10.4087 21.9512 12 21.9512H24C25.5913 21.9512 27.1174 22.5833 28.2426 23.7085C29.3679 24.8337 30 26.3599 30 27.9512C30 28.7468 29.6839 29.5099 29.1213 30.0725C28.5587 30.6351 27.7956 30.9512 27 30.9512H9C8.20435 30.9512 7.44129 30.6351 6.87868 30.0725C6.31607 29.5099 6 28.7468 6 27.9512Z" stroke="#2D2D2D" stroke-width="3" stroke-linejoin="round" />
+                        <path d="M18 15.9512C20.4853 15.9512 22.5 13.9365 22.5 11.4512C22.5 8.96589 20.4853 6.95117 18 6.95117C15.5147 6.95117 13.5 8.96589 13.5 11.4512C13.5 13.9365 15.5147 15.9512 18 15.9512Z" stroke="#2D2D2D" stroke-width="3" />
+                    </svg>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="text-align: center;">
+                    {% if user.userreg_set.exists %}
+                    <!-- If User is a registered user -->
+                    <li><a class="dropdown-item" href="{% url 'profile' %}" style="text-align: center;">Profile</a></li>
+                    {% elif user.is_staff %}
+                    <!-- If User is a master -->
+                    <li><a class="dropdown-item" href="{% url 'master_profile' %}" style="text-align: center;">Profile</a></li>
+                    {% else %}
+                    <!-- Handle cases where user type is unknown -->
+                    <li><a class="dropdown-item" href="{% url 'profile' %}" style="text-align: center;">Profile</a></li>
+                    {% endif %}
+                    <li>
+                        <form action="{% url 'logout' %}" method="post" class="">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link" style="text-decoration: none; color: black; text-align: left;">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
             {% endif %}
         </div>
     </nav>
-
-    
             <div class="col-md-12">
                 <div class="author-container" style="margin-top: -2rem;">
                     <div class="row">
-                        <div class="col-md-6">
-                            <!-- <div class="pagecount">
-                                <h5>Rows Per Page</h5>
-                                <select>
-                                    <option>1</option>
-                                </select>
-                            </div> -->
-                        </div>
-                        <div class="col-md-2"></div>
-                        <div class="col-md-4">
-                            <!-- <div class='author-search'>
-                                <input type='text' placeholder='Search here' />
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="12" fill="#d7f0fe"/>
-                                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m16.893 16.92l3.08 3.08m-.889-8.419c0 4.187-3.383 7.581-7.555 7.581c-4.173 0-7.556-3.394-7.556-7.58C3.973 7.393 7.356 4 11.528 4c4.173 0 7.556 3.394 7.556 7.581"/>
-                                </svg>
-                            </div>        -->
-                        </div>
-                    </div>
-
-                    <div class="admin-author-table">
-                        <table class="mt-3">
-                            <colgroup>
-                                <col style="width: 10%">
-                                <col style="width: 10%">
-                                <col style="width: 10%">
-                                <col style="width: 15%">
-                                <col style="width: 10%">
-                                <col style="width: 15%">
-                                <col style="width: 15%">
-                                <col style="width: 10%">
-                                <col style="width: 10%">
-                            </colgroup>
-                            <thead style="height: 50px">
-                                <tr>
-                                    <th>Sl No</th>
-                                    <th>Profile</th>
-                                    <th>User Name</th>
-                                    <th>E-mail</th>
-                                    <th>Contact no</th>
-                                    <th>Address</th>
-                                    <th>Type</th>
-                                    <th>Qualification</th>
-                                    <th>Description</th>
-                                </tr>
-                            </thead>
-                            <tbody class="admintable-body">
-                                {% for master in page_obj %}
-                                <tr>
-                                    <td>{{ forloop.counter }}</td>
-                                    <td id="authorimg">
-                                        <img src="{{ master.img.url }}" alt="Profile Image">
-                                    </td>
-                                    <td>{{ master.username }}</td>
-                                    <td>{{ master.email }}</td>
-                                    <td>{{ master.phone }}</td>
-                                    <td>{{ master.address }}</td>
-                                    <td>{{ master.field }}</td>
-                                    <td>{{ master.qual }}</td>
-                                    <td>{{ master.description }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-
-                        <div class="pagination">
-                            <span class="step-links">
-                                {% if page_obj.has_previous %}
-                                    <a class="pageli" href="?page=1">
-                                        <!-- First -->
-                                    </a>
-                                    <a class="pageli" href="?page={{ page_obj.previous_page_number }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                            <path fill="currentColor" d="m14 18l-6-6l6-6l1.4 1.4l-4.6 4.6l4.6 4.6z"/>
-                                        </svg>
-                                        <!-- Previous -->
-                                    </a>
-                                {% endif %}
-                        
-                                <span class="current">
-                                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        <div class="admin-author-table">
+                            <table class="mt-3" style="text-align: center;">
+                                <colgroup>
+                                    <col style="width: 10%">
+                                    <col style="width: 10%">
+                                    <col style="width: 10%">
+                                    <col style="width: 15%">
+                                    <col style="width: 10%">
+                                    <col style="width: 15%">
+                                    <col style="width: 15%">
+                                    <col style="width: 10%">
+                                    <col style="width: 10%">
+                                </colgroup>
+                                <thead style="height: 50px">
+                                    <tr>
+                                        <th>Sl No</th>
+                                        <th>Profile</th>
+                                        <th>User Name</th>
+                                        <th>E-mail</th>
+                                        <th>Contact no</th>
+                                        
+                                        <th>Type</th>
+                                        <th>Qualification</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="admintable-body">
+                                    {% for master in page_obj %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td id="authorimg">
+                                            <img src="{{ master.img.url }}" alt="Profile Image">
+                                        </td>
+                                        <td>{{ master.username }}</td>
+                                        <td>{{ master.email }}</td>
+                                        <td>{{ master.phone }}</td>
+                                        
+                                        <td>{{ master.field }}</td>
+                                        <td>{{ master.qual }}</td>
+                                        <td>{{ master.description }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+    
+                            <div class="pagination">
+                                <span class="step-links">
+                                    {% if page_obj.has_previous %}
+                                        <a class="pageli" href="?page=1">
+                                            <!-- First -->
+                                        </a>
+                                        <a class="pageli" href="?page={{ page_obj.previous_page_number }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                                <path fill="currentColor" d="m14 18l-6-6l6-6l1.4 1.4l-4.6 4.6l4.6 4.6z"/>
+                                            </svg>
+                                            <!-- Previous -->
+                                        </a>
+                                    {% endif %}
+                            
+                                    <span class="current">
+                                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                    </span>
+                            
+                                    {% if page_obj.has_next %}
+                                        <a class="pageli" href="?page={{ page_obj.next_page_number }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                                <path fill="currentColor" d="M12.6 12L8 7.4L9.4 6l6 6l-6 6L8 16.6z"/>
+                                            </svg>
+                                            <!-- Next -->
+                                        </a>
+                                        <a class="pageli" href="?page={{ page_obj.paginator.num_pages }}">
+                                            <!-- Last -->
+                                        </a>
+                                    {% endif %}
                                 </span>
-                        
-                                {% if page_obj.has_next %}
-                                    <a class="pageli" href="?page={{ page_obj.next_page_number }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                            <path fill="currentColor" d="M12.6 12L8 7.4L9.4 6l6 6l-6 6L8 16.6z"/>
-                                        </svg>
-                                        <!-- Next -->
-                                    </a>
-                                    <a class="pageli" href="?page={{ page_obj.paginator.num_pages }}">
-                                        <!-- Last -->
-                                    </a>
-                                {% endif %}
-                            </span>
+                            </div>
+    
                         </div>
-
                     </div>
+
+                    
                 </div>
             </div>
         </div>
-    
+
 </body>
 
 </html>

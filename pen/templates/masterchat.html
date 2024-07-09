@@ -37,6 +37,10 @@
         margin: 0 auto;
         margin-top: 10px; /* Adjust as needed */
     }
+    .chat-hold >div  .sender {
+    float: right;
+    /* background-color: #46aae4; */
+}
 </style>
 <body>
     <nav id='common-home-navbar' class="navbar bg-body-tertiarynavbar-expand-lg navbar-light bg-light">
@@ -147,7 +151,7 @@
                         {% if messages %}
                             {% for message in messages %}
                                 <div>
-                                    {% if message.sender_user %}
+                                    {% if message.sender_master %}
                                         <!-- <small class="sender">{{ message.timestamp|time:"g:iA" }}</small><br> -->
                                         <strong class="sender">{{ message.message }}</strong>
                                         <div class="clearfix"></div>
@@ -169,10 +173,10 @@
                         {% endif %}
                     </div>
                 </div>
-                <form method="post" class="chat-box" action="{% url 'send_message' %}" style="margin-bottom: 25px;">
+                <form method="post" class="chat-box" action="{% url 'send_message' %}" style="margin-bottom: 11px;">
                     {% csrf_token %}
                     <input type="hidden" name="receiver_user_id" value="{{ selected_user.id }}">
-                    <input type="text" name="message" placeholder="Type a message" style="flex: 1; padding: 8px 15px; border-radius: 25px; outline: none; font-size: 14px;width: 140vh; border: 3px solid rgb(0,0,0,0.20);">
+                    <input type="text" name="message" placeholder="Type a message" style="flex: 1; padding: 7px 15px; border-radius: 25px; outline: none; font-size: 14px;width: 140vh; border: 3px solid rgb(0,0,0,0.20);">
                     <button type="submit" style="background: transparent; border: none; padding: 0;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
                             <path d="M29.8363 15.0521L1.24498 0.717144C1.12877 0.659039 0.995465 0.645367 0.869 0.676129C0.578473 0.747906 0.39732 1.04185 0.469097 1.3358L3.41539 13.3739C3.45982 13.555 3.59312 13.702 3.77085 13.7601L8.81919 15.493L3.77427 17.2259C3.59654 17.2875 3.46324 17.431 3.42222 17.6122L0.469097 29.6673C0.438336 29.7938 0.452008 29.9271 0.510113 30.0399C0.643414 30.3099 0.971539 30.4193 1.24498 30.286L29.8363 16.0331C29.9422 15.9818 30.0277 15.8929 30.0824 15.7904C30.2157 15.5169 30.1063 15.1888 29.8363 15.0521ZM3.83921 26.2425L5.55845 19.2152L15.6483 15.7528C15.7269 15.7254 15.7918 15.6639 15.8192 15.5819C15.867 15.4383 15.7918 15.2845 15.6483 15.2333L5.55845 11.7743L3.84605 4.77427L25.3109 15.5375L3.83921 26.2425Z" fill="#2D2D2D"/>

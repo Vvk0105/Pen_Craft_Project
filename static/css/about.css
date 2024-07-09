@@ -18,15 +18,14 @@
     background-size: cover; /* Adjust to cover the entire section */
     background-position: center; /* Center the background image */
     background-repeat: no-repeat; /* Ensure the background image doesn't repeat */
-    height: 590px;
+    height: 647px;
     text-align: center;
     position: relative;
     font-family: "Poppins", sans-serif;
     font-weight: 600;
     color: #fff;
     box-sizing: border-box;
-    width: 130vh;
-    margin-left: 45vh;
+    width: 142vh;
 }
 
 .banner{

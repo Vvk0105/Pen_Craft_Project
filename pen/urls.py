@@ -21,8 +21,10 @@ urlpatterns = [
     path('reset_password/<str:username>/', views.reset_password, name='reset_password'),
     path('home/',views.home_view,name='home'),
     path('about/',views.about,name='about'),
+    path('aboutlanding/',views.aboutlanding,name='aboutlanding'),
 
-
+    path('error-page/', views.error_page, name='error_page'),
+    path('get-submission-content/<int:submission_id>/', views.get_submission_content, name='get_submission_content'),
     path('user_chat/', views.user_chat, name='user_chat'),
     path('master_chat/', views.master_chat, name='master_chat'),
     path('send_message/', views.send_message, name='send_message'),

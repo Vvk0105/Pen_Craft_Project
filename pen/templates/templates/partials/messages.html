@@ -1,0 +1,11 @@
+{% for message in messages %}
+    <div class="message {% if message.sender_user %}sent{% else %}received{% endif %}">
+        <strong>
+            {% if message.sender_user %}
+                {{ message.sender_user.user.username }}
+            {% else %}
+                {{ message.sender_master.username }}
+            {% endif %}
+        </strong>: {{ message.message }}
+    </div>
+{% endfor %}

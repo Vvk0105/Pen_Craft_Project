@@ -42,7 +42,7 @@
                     <div class="writer-card">
                         <div class="row">
                             <div class="col-md-12">
-                                <img class="img-fluid" src="{{ submission.user.userreg.image.url }}" alt="{{ submission.user.username }}">
+                                <img class="img-fluid" src="{{ submission.user.userreg.image.url }}" alt="{{ submission.user.username }}" style="width: 200px; height: 176;">
                             </div>
                         </div>
                         <div class="row">
@@ -87,7 +87,7 @@
                                     {% if feedback.reviewed_by_user %}
                                         <p>{{ feedback.reviewed_by_user.username }}</p>
                                     {% else %}
-                                        <p>User is no longer available</p>
+                                        <p style="color: red;">User is no longer available</p>
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}

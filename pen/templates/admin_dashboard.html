@@ -39,7 +39,31 @@
         .ring-container h4 {
             margin-top: 10px;
         }
+
+        .btn-custom {
+            border: 2px solid #00A3FF;
+            background-color: transparent;
+            color: #00A3FF;
+            padding: 2px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 8px;
+        }
+        .btn-custom:hover {
+            background-color: #00A3FF;
+            color: white;
+        }
     </style>
+    <script>
+        // This script ensures the page is always reloaded when navigating with the back button
+        (function () {
+            if (window.history && window.history.pushState) {
+                window.addEventListener('popstate', function () {
+                    window.location.reload();
+                });
+            }
+        })();
+    </script>
 </head>
 <body>
 
@@ -62,7 +86,7 @@
                     {% if user.is_authenticated %}
                     <div class="icon">
                         <div class="admin-Logout-content">
-                            <a href="{% url 'logout' %}">
+                            <a href="{% url 'logout' %}" style="text-decoration: none;">
                                 <h3>Logout</h3>
                             </a>
                         </div>
@@ -121,28 +145,28 @@
         <div class="col-md-2">
             <div class="sidebar">
                 <div class="dashboard-box1 border">
-                    <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'admin_dashboard' %}">Dashboard ></a>
+                    <a style="text-decoration: none; color: white; font-weight: 500; font-size: 12px;" href="{% url 'admin_dashboard' %}">Dashboard ></a>
                 </div>
                 <h3>Master Writers</h3>
                 <div class="dashboard-box2 border">
-                    <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'admin_master_view' %}">View request ></a>
+                    <a style="text-decoration: none; color: white; font-weight: 500; font-size: 12px;" href="{% url 'admin_master_view' %}">View request ></a>
                 </div>
                 <div class="dashboard-box3 border">
-                    <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'all_master' %}">All master writers ></a>
+                    <a style="text-decoration: none; color: white; font-weight: 500; font-size: 12px;" href="{% url 'all_master' %}">All master writers ></a>
                 </div>
 
                 <h3>Users</h3>
                 <div class="dashboard-box4 border">
-                    <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'all_writters' %}">View authors ></a>
+                    <a style="text-decoration: none; color: white; font-weight: 500; font-size: 12px;" href="{% url 'all_writters' %}">View authors ></a>
                 </div>
                 <div class="dashboard-box5 border">
-                    <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'submission_history' %}">Submission history ></a>
+                    <a style="text-decoration: none; color: white; font-weight: 500; font-size: 12px;" href="{% url 'submission_history' %}">Submission history ></a>
                 </div>
                 <div class="dashboard-box6 border">
-                    <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'view_complaints' %}">View Complaints > </a>
+                    <a style="text-decoration: none; color: white; font-weight: 500; font-size: 12px;" href="{% url 'view_complaints' %}">View Complaints > </a>
                 </div>
                 <div class="dashboard-box6 border">
-                    <a style="text-decoration: none; color: white; font-weight: 100; font-size: 12px;" href="{% url 'enquiries' %}">View Enquiries > </a>
+                    <a style="text-decoration: none; color: white; font-weight: 500; font-size: 12px;" href="{% url 'enquiries' %}">View Enquiries > </a>
                 </div>
             </div>
         </div>
@@ -152,19 +176,23 @@
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="count-card blue">
-                                <h1>{{ total_users }}</h1>
-                                <h3 class="label">Registered Users</h3>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <div class="count-card blue" style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="flex: 1;">
+                                    <h1>{{ total_users }}</h1>
+                                    <h3 class="label">Registered Users</h3>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" style="margin-bottom: 70px;">
                                     <path d="M13.875 35.25H27.375V32.75H13.875V35.25ZM13.875 25.25H34.125V22.75H13.875V25.25ZM13.875 15.25H34.125V12.75H13.875V15.25ZM6 44V4H42V44H6ZM8.25 41.5H39.75V6.5H8.25V41.5Z" fill="#00A3FF"/>
                                 </svg>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="count-card green" style="padding-top: 0px;">
-                                <h1>{{ article_count }}</h1>
+                            <div class="count-card green" style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="flex: 1;">
+                                    <h1>{{ article_count }}</h1>
                                 <h3 class="label">Articles</h3>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="44" viewBox="0 0 48 44" fill="none">
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="44" viewBox="0 0 48 44" fill="none" style="margin-bottom: 70px;">
                                     <g filter="url(#filter0_d_299_268)">
                                     <path d="M26.9343 2H8.79124C8.05096 2 7.34099 2.29408 6.81754 2.81754C6.29408 3.34099 6 4.05096 6 4.79124V35.4949C6 36.2352 6.29408 36.9451 6.81754 37.4686C7.34099 37.9921 8.05096 38.2861 8.79124 38.2861H33.9124C34.6527 38.2861 35.3627 37.9921 35.8861 37.4686C36.4096 36.9451 36.7037 36.2352 36.7037 35.4949V22.9343M6 29.9124H36.7037M14.3737 8.9781H19.9562M14.3737 15.9562H17.165" stroke="#00A3FF" stroke-width="2.44234" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M29.7087 21.5558L21.335 23.0631L22.7306 14.5777L34.5375 2.82662C34.797 2.565 35.1057 2.35735 35.4459 2.21564C35.786 2.07393 36.1508 2.00098 36.5193 2.00098C36.8878 2.00098 37.2526 2.07393 37.5928 2.21564C37.9329 2.35735 38.2416 2.565 38.5011 2.82662L41.4598 5.78534C41.7221 6.04444 41.9304 6.35303 42.0725 6.69322C42.2146 7.03341 42.2878 7.39843 42.2878 7.76712C42.2878 8.13581 42.2146 8.50083 42.0725 8.84102C41.9304 9.18121 41.7221 9.4898 41.4598 9.7489L29.7087 21.5558Z" stroke="#00A3FF" stroke-width="2.44234" stroke-linecap="round" stroke-linejoin="round"/>
@@ -186,10 +214,12 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="count-card blue">
-                                <h1>{{ total_masters }}</h1>
+                            <div class="count-card blue" style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="flex: 1;">
+                                    <h1>{{ total_masters }}</h1>
                                 <h3 class="label">Master Writters</h3>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="42" height="30" viewBox="0 0 42 30" fill="none">
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="42" height="30" viewBox="0 0 42 30" fill="none" style="margin-bottom: 70px;">
                                     <path d="M7.5 16.5C7.5 16.8978 7.34196 17.2794 7.06066 17.5607C6.77936 17.842 6.39782 18 6 18H1.5C1.10218 18 0.720644 17.842 0.43934 17.5607C0.158035 17.2794 0 16.8978 0 16.5C0 16.1022 0.158035 15.7206 0.43934 15.4393C0.720644 15.158 1.10218 15 1.5 15H3V3H1.5C1.10218 3 0.720644 2.84197 0.43934 2.56066C0.158035 2.27936 0 1.89783 0 1.5C0 1.10218 0.158035 0.720646 0.43934 0.439341C0.720644 0.158036 1.10218 8.58309e-07 1.5 8.58309e-07H4.5C4.75393 -0.000270755 5.00377 0.0639262 5.22612 0.186577C5.44846 0.309227 5.63603 0.486317 5.77125 0.701251L12 10.6706L18.2288 0.705001C18.3635 0.48937 18.5509 0.31154 18.7733 0.188218C18.9956 0.0648946 19.2457 0.000127419 19.5 8.58309e-07H22.5C22.8978 8.58309e-07 23.2794 0.158036 23.5607 0.439341C23.842 0.720646 24 1.10218 24 1.5C24 1.89783 23.842 2.27936 23.5607 2.56066C23.2794 2.84197 22.8978 3 22.5 3H21V15H22.5C22.8978 15 23.2794 15.158 23.5607 15.4393C23.842 15.7206 24 16.1022 24 16.5C24 16.8978 23.842 17.2794 23.5607 17.5607C23.2794 17.842 22.8978 18 22.5 18H18C17.6022 18 17.2206 17.842 16.9393 17.5607C16.658 17.2794 16.5 16.8978 16.5 16.5C16.5 16.1022 16.658 15.7206 16.9393 15.4393C17.2206 15.158 17.6022 15 18 15V6.72938L13.2712 14.295C13.1363 14.5104 12.9489 14.688 12.7265 14.8111C12.5042 14.9342 12.2542 14.9988 12 14.9988C11.7458 14.9988 11.4958 14.9342 11.2735 14.8111C11.0511 14.688 10.8637 14.5104 10.7288 14.295L6 6.72938V15C6.39782 15 6.77936 15.158 7.06066 15.4393C7.34196 15.7206 7.5 16.1022 7.5 16.5ZM28.5 12H40.5C40.8978 12 41.2794 11.842 41.5607 11.5607C41.842 11.2794 42 10.8978 42 10.5C42 10.1022 41.842 9.72065 41.5607 9.43934C41.2794 9.15804 40.8978 9 40.5 9H28.5C28.1022 9 27.7206 9.15804 27.4393 9.43934C27.158 9.72065 27 10.1022 27 10.5C27 10.8978 27.158 11.2794 27.4393 11.5607C27.7206 11.842 28.1022 12 28.5 12ZM40.5 15H28.5C28.1022 15 27.7206 15.158 27.4393 15.4393C27.158 15.7206 27 16.1022 27 16.5C27 16.8978 27.158 17.2794 27.4393 17.5607C27.7206 17.842 28.1022 18 28.5 18H40.5C40.8978 18 41.2794 17.842 41.5607 17.5607C41.842 17.2794 42 16.8978 42 16.5C42 16.1022 41.842 15.7206 41.5607 15.4393C41.2794 15.158 40.8978 15 40.5 15ZM40.5 21H12C11.6022 21 11.2206 21.158 10.9393 21.4393C10.658 21.7206 10.5 22.1022 10.5 22.5C10.5 22.8978 10.658 23.2794 10.9393 23.5607C11.2206 23.842 11.6022 24 12 24H40.5C40.8978 24 41.2794 23.842 41.5607 23.5607C41.842 23.2794 42 22.8978 42 22.5C42 22.1022 41.842 21.7206 41.5607 21.4393C41.2794 21.158 40.8978 21 40.5 21ZM40.5 27H12C11.6022 27 11.2206 27.158 10.9393 27.4393C10.658 27.7206 10.5 28.1022 10.5 28.5C10.5 28.8978 10.658 29.2794 10.9393 29.5607C11.2206 29.842 11.6022 30 12 30H40.5C40.8978 30 41.2794 29.842 41.5607 29.5607C41.842 29.2794 42 28.8978 42 28.5C42 28.1022 41.842 27.7206 41.5607 27.4393C41.2794 27.158 40.8978 27 40.5 27Z" fill="#00A3FF"/>
                                     </svg>
 
@@ -219,17 +249,34 @@
                     <div class="ring-container-wrap">
                         <div class="row mb-3">
                             <div class="col">
-                                <button type="button" class="btn btn-primary" id="btn-master">Master</button>
-                                <button type="button" class="btn btn-secondary" id="btn-article">Article</button>
+                                <button type="button" class="btn btn-custom" id="btn-master">Master</button>
+                                <button type="button" class="btn btn-custom" id="btn-article">Article</button>
+                                
                             </div>
                         </div>
                         <div id="radial-container">
                             <div id="multi" class="ring-container"></div>
-                        <div id="dynamic-content" class="ring-container">
-                            <h4 class="h4" style="color: #00A3FF; font-size: large;">Approved Masters: {{ masters_approved }}</h4>
-                            <h4 class="h4" style="color: #00A3FF; font-size: large;">Pending Requests: {{ masters_pending }}</h4>
-                            <h4 class="h4" style="color: #00A3FF; font-size: large;">Masters Registered: {{ total_masters }}</h4>
-                        </div>
+                            <div id="dynamic-content" class="ring-container" style="margin-left: 4rem;">
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#FF3200"/>
+                                    </svg>
+                                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Approved Masters: {{ masters_approved }}</h4>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#00CC9B"/>
+                                    </svg>
+                                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Pending Requests: {{ masters_pending }}</h4>
+                                </div>
+                                <div style="display: flex; align-items: center;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#003FFF"/>
+                                    </svg>
+                                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Masters Registered: {{ total_masters }}</h4>
+                                </div>
+                            </div>
+                            
                     </div>
                         </div>
                         
@@ -265,9 +312,9 @@
                 antiAlias: true,
                 scaleLabel: true,
                 data: [
-                    { id: 'approvedBar', color: "#c5dba4", range: [0, total], value: approved },
-                    { id: 'pendingBar', color: "#91e67e", range: [0, total], value: pending },
-                    { id: 'totalBar', color: "#96f051", range: [0, total], value: total },
+                    { id: 'approvedBar', color: "#FF3200", range: [0, total], value: approved },
+                    { id: 'pendingBar', color: "#00CC9B", range: [0, total], value: pending },
+                    { id: 'totalBar', color: "#003FFF", range: [0, total], value: total },
                 ]
             });
         }
@@ -282,7 +329,7 @@
                     { id: 'totalBar', color: "#96f051", range: [0, total], value: total },
                 ]);
             } else {
-                initializeRadialProgress(approved, pending, total);
+                initializeRadialProgress(approved, pending, article_completed);
             }
         }
 
@@ -290,9 +337,26 @@
 
         $('#btn-master').click(function() {
             $('#dynamic-content').html(`
-                <h4 class="h4" style="color: #00A3FF; font-size: large;">Approved Masters: ${masters_approved}</h4>
-                <h4 class="h4" style="color: #00A3FF; font-size: large;">Pending Requests: ${masters_pending}</h4>
-                <h4 class="h4" style="color: #00A3FF; font-size: large;">Masters Registered: ${total_masters}</h4>
+                <div id="dynamic-content" class="ring-container">
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#FF3200"/>
+                    </svg>
+                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Approved Masters: ${masters_approved}</h4>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#00CC9B"/>
+                    </svg>
+                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Pending Requests: ${masters_pending}</h4>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#003FFF"/>
+                    </svg>
+                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Masters Registered: ${total_masters}</h4>
+                </div>
+            </div>
             `);
             updateRadialProgress(masters_approved, masters_pending, total_masters);
         });
@@ -311,9 +375,26 @@
                     console.log("Updated article counts:", article_submitted, article_opened, article_completed);
 
                     $('#dynamic-content').html(`
-                        <h4 class="h4" style="color: #00A3FF; font-size: large;">Submitted Articles: ${article_submitted}</h4>
-                        <h4 class="h4" style="color: #00A3FF; font-size: large;">Opened Articles: ${article_opened}</h4>
-                        <h4 class="h4" style="color: #00A3FF; font-size: large;">Completed Articles: ${article_completed}</h4>
+                        <div id="dynamic-content" class="ring-container">
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#FF3200"/>
+                    </svg>
+                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Submitted Articles: ${article_submitted}</h4>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#00CC9B"/>
+                    </svg>
+                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Opened Articles: ${article_opened}</h4>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#003FFF"/>
+                    </svg>
+                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Completed Articles: ${article_completed}</h4>
+                </div>
+            </div>
                     `);
                     
                     updateRadialProgress(article_submitted, article_opened, article_submitted + article_opened + article_completed);
