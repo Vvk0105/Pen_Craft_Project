@@ -16,7 +16,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import UserReg, Master, WritingSubmission
 import chardet
-
+from datetime import datetime, timedelta
 
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.contrib.auth.models import User
@@ -410,8 +410,8 @@ def home_view(request):
 def about(request):
     return render(request,'about.html')
 
-def aboutlanding(request):
-    return render(request,'aboutlanding.html')
+def landabout(request):
+    return render(request,'landabout.html')
 
 def get_submission_content(request, submission_id):
     submission = get_object_or_404(WritingSubmission, id=submission_id)
@@ -459,10 +459,8 @@ def submit_writing(request):
     return render(request, 'submit_writing.html')
 
 
-def is_admin(user):
-    return user.is_authenticated and user.is_superuser
-@login_required(login_url='login')
-@user_passes_test(is_admin, login_url='login')
+
+@user_is_superuser
 def admin_master_view(request):
     msg = ''
     query = request.GET.get('q')
@@ -480,10 +478,7 @@ def admin_master_view(request):
     return render(request, 'master_view_request.html', {"page_obj": page_obj, "msg": msg})
 
 
-def is_admin(user):
-    return user.is_authenticated and user.is_superuser
-@login_required(login_url='login')
-@user_passes_test(is_admin, login_url='login')
+@user_is_superuser
 def all_master(request):
     msg = 'Only admin can access this page'
     query = request.GET.get('q')
@@ -499,14 +494,11 @@ def all_master(request):
     
     return render(request, 'all_master.html', {"page_obj": page_obj, "msg": msg, "query": query})
 
-def is_admin(user):
-    return user.is_authenticated and user.is_superuser
-@login_required(login_url='login')
-@user_passes_test(is_admin, login_url='login')
+@user_is_superuser
 def all_writters(request):
     msg = ''
     query = request.GET.get('q')
-    
+
     if query:
         content = UserReg.objects.filter(user__username__icontains=query)
     else:
@@ -518,6 +510,7 @@ def all_writters(request):
     
     return render(request, 'all_writters.html', {"page_obj": page_obj, "msg": msg, "query": query})
 
+@user_is_superuser
 def is_admin(user):
     return user.is_authenticated and user.is_superuser
 @login_required(login_url='login')
@@ -629,7 +622,7 @@ def save_feedback(request, submission_id):
 
     return redirect('home')
 
-@login_required(login_url='login')
+@user_is_superuser
 def submission_history(request):
     # Fetch all submissions and prefetch the related feedback details
     submissions = WritingSubmission.objects.prefetch_related('feedbackdetails_set').all()
@@ -823,10 +816,7 @@ def view_masters(request):
     datas = Master.objects.all()
     return render(request, 'view_masters.html', {"page_obj": page_obj, "msg": msg})
 
-def is_admin(user):
-    return user.is_authenticated and user.is_superuser
-@login_required(login_url='login')
-@user_passes_test(is_admin, login_url='login')
+@user_is_superuser
 def enquiries(request):
     msg = ''
     query = request.GET.get('q')
@@ -862,53 +852,70 @@ def contact_view(request):
     
     return render(request, 'landing_page.html')
 
-
-@login_required(login_url='login')
+@user_is_superuser
 def admin_dashboard(request):
-    # Get the total count of Master and UserReg
-    total_masters = Master.objects.count()
+    # Total counts
     total_users = UserReg.objects.count()
-    
-    # Get weekly data for UserReg and Master
-    one_week_ago = timezone.now() - timezone.timedelta(days=7)
-    weekly_new_masters = Master.objects.filter(user__date_joined__gte=one_week_ago).count()
-    weekly_new_users = UserReg.objects.filter(user__date_joined__gte=one_week_ago).count()
+    article_count = WritingSubmission.objects.count()
 
-    context = {
-        'total_masters': total_masters,
-        'total_users': total_users,
-        'weekly_new_masters': weekly_new_masters,
-        'weekly_new_users': weekly_new_users,
-    }
-    
-    return render(request, 'admin_dashboard.html', context)
-
-def is_admin(user):
-    return user.is_authenticated and user.is_superuser
-@login_required(login_url='login')
-@user_passes_test(is_admin, login_url='login')
-def admin_dashboard(request):
-    total_masters = Master.objects.count()
-    total_users = UserReg.objects.count()
-    article_count = WritingSubmission.objects.filter(status='completed').count()
-    submitted_count = WritingSubmission.objects.filter(status='submitted').count()
+    # Submission status counts
+    submitted_count = WritingSubmission.objects.filter(status='rejected').count()
     open_count = WritingSubmission.objects.filter(status='open').count()
-    
+    completed_count = WritingSubmission.objects.filter(status='completed').count()
 
+    # Calculate scaled percentages (0 to 1) for submission status counts
+    if article_count > 0:
+        scaled_submitted_count = article_count
+        scaled_open_count = (open_count / article_count)
+        scaled_completed_count = (completed_count / article_count)
+    else:
+        scaled_submitted_count = 0
+        scaled_open_count = 0
+        scaled_completed_count = 0
+
+    # Master counts
+    total_masters = Master.objects.count()
     masters_approved = Master.objects.filter(user__is_active=True).count()
     masters_pending = Master.objects.filter(user__is_active=False).count()
 
+    # Calculate scaled percentages (0 to 1)
+    if total_masters > 0:
+        scaled_percentage_approved = (masters_approved / total_masters)
+        scaled_percentage_pending = (masters_pending / total_masters)
+    else:
+        scaled_percentage_approved = 0
+        scaled_percentage_pending = 0
+
+    # Weekly signups for last 4 weeks
+    weekly_signups = {}
+    current_week = timezone.now().isocalendar()[1]
+    start_date = timezone.now() - timedelta(weeks=4)
+    
+    for i in range(5):
+        week_number = current_week - i
+        start_of_week = start_date + timedelta(weeks=i)
+        end_of_week = start_of_week + timedelta(days=6, hours=23, minutes=59, seconds=59)
+        weekly_signups[f"Week {week_number}"] = UserReg.objects.filter(
+            created_at__range=[start_of_week, end_of_week]
+        ).count()
+
+    # Context data
     context = {
         'total_masters': total_masters,
         'total_users': total_users,
-        'masters_approved': masters_approved,
-        'masters_pending': masters_pending,
         'article_count': article_count,
         'submitted_count': submitted_count,
-        'open_count': open_count,
+        'open_count': scaled_open_count,
+        'completed_count': scaled_completed_count,
+        'masters_approved': scaled_percentage_approved,
+        'masters_pending': scaled_percentage_pending,
+        'scaled_percentage_approved': scaled_percentage_approved,
+        'scaled_percentage_pending': scaled_percentage_pending,
+        'weekly_signups': weekly_signups,
     }
 
     return render(request, 'admin_dashboard.html', context)
+
 
 def get_article_counts(request):
     submitted_count = WritingSubmission.objects.filter(status='submitted').count()

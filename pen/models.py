@@ -3,6 +3,7 @@ from django.utils import timezone
 # Create your models here.
 from django.contrib.auth.models import User
 
+
 class UserReg(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='Profile', default='profile/default.jpg')
@@ -12,6 +13,7 @@ class UserReg(models.Model):
     location = models.CharField(max_length=100,default='Not Provided')
     state = models.CharField(max_length=100,default='Not Provided')
     city = models.CharField(max_length=100,default='Not Provided')
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.user.username

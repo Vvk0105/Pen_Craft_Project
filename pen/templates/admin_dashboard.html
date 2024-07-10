@@ -101,43 +101,37 @@
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-    // Load the Visualization API and the corechart package.
     google.charts.load('current', {'packages':['corechart']});
-
-    // Set a callback to run when the Google Visualization API is loaded.
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
-        // Get data from Django template context
-        var mastersApproved = {{ masters_approved }};
-        var mastersPending = {{ masters_pending }};
-        var totalMasters = {{ total_masters }};
+        var weeklySignups = {{ weekly_signups|safe }};
 
-        // Prepare data for the chart
         var data = google.visualization.arrayToDataTable([
-            ['Status', 'Count'],
-            ['Approved', mastersApproved],
-            ['Pending', mastersPending],
-            ['Total', totalMasters]
+            ['Week', 'Sign-ups'],
+            {% for week, count in weekly_signups.items %}
+            ['{{ week }}', {{ count }}],
+            {% endfor %}
         ]);
 
         var options = {
-            title: 'Master Registration Status',
-            hAxis: {title: 'Status'},
-            vAxis: {title: 'Count'},
+            title: 'Weekly User Sign-Ups',
+            hAxis: {title: 'Week'},
+            vAxis: {title: 'Sign-ups'},
             legend: { position: 'bottom' },
-            curveType: 'function', // This makes the chart non-linear
+            curveType: 'function',
             pointSize: 5,
-            colors: ['#4A90E2'],  // Set the line color to blue
-            areaOpacity: 0.2,  // Set the fill opacity
-            lineWidth: 2,  // Set the line width
-            backgroundColor: { fill: 'transparent' },  // Transparent background if needed
+            colors: ['#4A90E2'],
+            areaOpacity: 0.2,
+            lineWidth: 2,
+            backgroundColor: { fill: 'transparent' },
             chartArea: { width: '80%', height: '70%' }
         };
 
         var chart = new google.visualization.LineChart(document.getElementById('chart_div2'));
         chart.draw(data, options);
     }
+</script>
 </script>
 
 <section id="dashboard">
@@ -248,26 +242,35 @@
                 <div class="col-md-4">
                     <div class="ring-container-wrap">
                         <div class="row mb-3">
-                            <div class="col">
-                                <button type="button" class="btn btn-custom" id="btn-master">Master</button>
-                                <button type="button" class="btn btn-custom" id="btn-article">Article</button>
-                                
+                            <div class="col-6 mb-2">
+                                <button type="button" class="btn btn-custom w-100" id="changeButton1">Approved</button>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <button type="button" class="btn btn-custom w-100" id="changeButton">Pending</button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-custom w-100" id="completed">Completed</button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-custom w-100" id="opened">Rejected</button>
                             </div>
                         </div>
+                        
                         <div id="radial-container">
-                            <div id="multi" class="ring-container"></div>
+                            <div id="container" class="ring-container"></div>
+                            <!-- <button id="changeButton">Change</button>    -->
                             <div id="dynamic-content" class="ring-container" style="margin-left: 4rem;">
-                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <!-- <div style="display: flex; align-items: center; margin-bottom: 10px;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
                                         <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#FF3200"/>
                                     </svg>
-                                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Approved Masters: {{ masters_approved }}</h4>
-                                </div>
+                                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Approved Masters: {{ masters_approved }}%</h4>
+                                </div> -->
                                 <div style="display: flex; align-items: center; margin-bottom: 10px;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
                                         <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#00CC9B"/>
                                     </svg>
-                                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Pending Requests: {{ masters_pending }}</h4>
+                                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Article Submitted: {{ article_count }}</h4>
                                 </div>
                                 <div style="display: flex; align-items: center;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
@@ -293,6 +296,211 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/progressbar.js"></script>
+        <script>
+            // Create the initial radial progress bar
+            function getColor(fromColor, toColor, progress) {
+        var r = Math.round(fromColor[0] + (toColor[0] - fromColor[0]) * progress);
+        var g = Math.round(fromColor[1] + (toColor[1] - fromColor[0]) * progress);
+        var b = Math.round(fromColor[2] + (toColor[2] - fromColor[2]) * progress);
+        return 'rgb(' + b + ',' + g + ',' + r + ')';
+    }
+
+    // Create the initial radial progress bar
+    var bar = new ProgressBar.Circle('#container', {
+        color: '#FF3200',
+        strokeWidth: 20,
+        trailWidth: 1,
+        easing: 'easeInOut',
+        duration: 1400,
+        from: { color: 'rgb(255,50,0)', width: 1 },
+        to: { color: 'rgb(0,150,255)', width: 10 },
+        // Set default step function for all animate calls
+        step: function(state, circle) {
+            var progress = circle.value();
+            var fromColor = [255, 50, 0]; // RGB for #FF3200
+            var toColor = [0, 150, 255]; // RGB for a different color
+            var color = getColor(fromColor, toColor, progress);
+
+            circle.path.setAttribute('stroke', color);
+            circle.path.setAttribute('stroke-width', state.width);
+            
+            var value = Math.round(circle.value() * 100);
+            if (value === 0) {
+                circle.setText('');
+            } else {
+                circle.setText('.' + value + '%');
+            }
+        }
+    });
+
+    // Set initial value
+    bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+    bar.text.style.fontSize = '2rem';
+
+    // Animate from 0 to 1 (0% to 100%)
+    bar.animate(1.0, {
+        duration: 1400
+    }, function() {
+        // After reaching 100%, animate from 1 (100%) to 0 (0%)
+        bar.animate(0.0, {
+            duration: 1400
+        }, function() {
+            // After reaching 0%, animate to 0.2
+            bar.animate(0.2, {
+                duration: 500
+            });
+        });
+    });
+     // Number from 0.0 to 1.0
+        
+            document.getElementById('changeButton').addEventListener('click', function() {
+                // Change to new value and color
+                bar.animate({{ masters_pending }}, {
+                    duration: 1400,
+                    step: function(state, circle) {
+                        circle.path.setAttribute('stroke', '#00FF00');  // Change color dynamically
+                        circle.path.setAttribute('stroke-width', state.width);
+                        var value = Math.round(circle.value() * 100);
+                        if (value === 0) {
+                            circle.setText('');
+                        } else {
+                            circle.setText('.' + value + '%');
+                        }
+                    }
+                });
+            });
+            
+            document.getElementById('changeButton1').addEventListener('click', function() {
+                // Change to new value and color
+                bar.animate({{ masters_approved }}, {
+                    duration: 1400,
+                    step: function(state, circle) {
+                        circle.path.setAttribute('stroke', '#00FF00');  // Change color dynamically
+                        circle.path.setAttribute('stroke-width', state.width);
+                        var value = Math.round(circle.value() * 100);
+                        if (value === 0) {
+                            circle.setText('');
+                        } else {
+                            circle.setText('.' + value + '%');
+                        }
+                    }
+                });
+            });
+
+            document.getElementById('opened').addEventListener('click', function() {
+                // Change to new value and color
+                bar.animate(.{{ submitted_count }}, {
+                    duration: 1400,
+                    step: function(state, circle) {
+                        circle.path.setAttribute('stroke', '#00FF00');  // Change color dynamically
+                        circle.path.setAttribute('stroke-width', state.width);
+                        var value = Math.round(circle.value() * 100);
+                        if (value === 0) {
+                            circle.setText('');
+                        } else {
+                            circle.setText('.' + value + '%');
+                        }
+                    }
+                });
+            });
+
+            document.getElementById('completed').addEventListener('click', function() {
+                // Change to new value and color
+                bar.animate({{ completed_count }}, {
+                    duration: 1400,
+                    step: function(state, circle) {
+                        circle.path.setAttribute('stroke', '#00FF00');  // Change color dynamically
+                        circle.path.setAttribute('stroke-width', state.width);
+                        var value = Math.round(circle.value() * 100);
+                        if (value === 0) {
+                            circle.setText('');
+                        } else {
+                            circle.setText('.' + value + '%');
+                        }
+                    }
+                });
+            });
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--         
 <script src="{% static 'js/radialMultiProgress.js' %}"></script>
 <script>
     $(document).ready(function() {
@@ -405,9 +613,9 @@
             });
         });
     });
-</script>
+</script> -->
+
 
 
 </body>
 </html>
-

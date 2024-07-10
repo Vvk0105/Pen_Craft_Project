@@ -9,7 +9,7 @@ urlpatterns = [
             
 
     path('', views.index, name='index'),
-   
+    
     path('logout/', views.LogoutPage, name='logout'),
     path('registration/', views.registration, name='registration'),
     path('login/', views.login_user, name='login'),
@@ -21,7 +21,7 @@ urlpatterns = [
     path('reset_password/<str:username>/', views.reset_password, name='reset_password'),
     path('home/',views.home_view,name='home'),
     path('about/',views.about,name='about'),
-    path('aboutlanding/',views.aboutlanding,name='aboutlanding'),
+    path('landabout/',views.landabout,name='landabout'),
 
     path('error-page/', views.error_page, name='error_page'),
     path('get-submission-content/<int:submission_id>/', views.get_submission_content, name='get_submission_content'),
