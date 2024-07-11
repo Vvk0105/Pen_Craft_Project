@@ -242,11 +242,23 @@
                 <div class="col-md-4">
                     <div class="ring-container-wrap">
                         <div class="row mb-3">
+                            <div style=" align-items: center;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                                    <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#00CC9B"/>
+                                </svg>
+                                <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Masters Registered: {{ total_masters }}</h4>   
+                            </div>
                             <div class="col-6 mb-2">
                                 <button type="button" class="btn btn-custom w-100" id="changeButton1">Approved</button>
                             </div>
                             <div class="col-6 mb-2">
                                 <button type="button" class="btn btn-custom w-100" id="changeButton">Pending</button>
+                            </div>
+                            <div style=" align-items: center;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                                    <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#003FFF"/>
+                                </svg>
+                                <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Article Submitted: {{ article_count }}</h4>
                             </div>
                             <div class="col-6">
                                 <button type="button" class="btn btn-custom w-100" id="completed">Completed</button>
@@ -266,18 +278,8 @@
                                     </svg>
                                     <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Approved Masters: {{ masters_approved }}%</h4>
                                 </div> -->
-                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
-                                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#00CC9B"/>
-                                    </svg>
-                                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Article Submitted: {{ article_count }}</h4>
-                                </div>
-                                <div style="display: flex; align-items: center;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
-                                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#003FFF"/>
-                                    </svg>
-                                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Masters Registered: {{ total_masters }}</h4>
-                                </div>
+                                
+                                
                             </div>
                             
                     </div>
@@ -301,9 +303,9 @@
             // Create the initial radial progress bar
             function getColor(fromColor, toColor, progress) {
         var r = Math.round(fromColor[0] + (toColor[0] - fromColor[0]) * progress);
-        var g = Math.round(fromColor[1] + (toColor[1] - fromColor[0]) * progress);
+        var g = Math.round(fromColor[1] + (toColor[1] - fromColor[1]) * progress);
         var b = Math.round(fromColor[2] + (toColor[2] - fromColor[2]) * progress);
-        return 'rgb(' + b + ',' + g + ',' + r + ')';
+        return 'rgb(' + r + ',' + g + ',' + b + ')';
     }
 
     // Create the initial radial progress bar
@@ -331,6 +333,7 @@
             } else {
                 circle.setText('.' + value + '%');
             }
+            circle.text.style.color = color; 
         }
     });
 
@@ -359,7 +362,7 @@
                 bar.animate({{ masters_pending }}, {
                     duration: 1400,
                     step: function(state, circle) {
-                        circle.path.setAttribute('stroke', '#00FF00');  // Change color dynamically
+                        circle.path.setAttribute('stroke', '#00CC9B');  // Change color dynamically
                         circle.path.setAttribute('stroke-width', state.width);
                         var value = Math.round(circle.value() * 100);
                         if (value === 0) {
@@ -367,6 +370,7 @@
                         } else {
                             circle.setText('.' + value + '%');
                         }
+                        circle.text.style.color = '#00CC9B';
                     }
                 });
             });
@@ -376,7 +380,7 @@
                 bar.animate({{ masters_approved }}, {
                     duration: 1400,
                     step: function(state, circle) {
-                        circle.path.setAttribute('stroke', '#00FF00');  // Change color dynamically
+                        circle.path.setAttribute('stroke', '#00CC9B');  // Change color dynamically
                         circle.path.setAttribute('stroke-width', state.width);
                         var value = Math.round(circle.value() * 100);
                         if (value === 0) {
@@ -384,6 +388,7 @@
                         } else {
                             circle.setText('.' + value + '%');
                         }
+                        circle.text.style.color = '#00CC9B';
                     }
                 });
             });
@@ -393,7 +398,7 @@
                 bar.animate(.{{ submitted_count }}, {
                     duration: 1400,
                     step: function(state, circle) {
-                        circle.path.setAttribute('stroke', '#00FF00');  // Change color dynamically
+                        circle.path.setAttribute('stroke', '#003FFF');  // Change color dynamically
                         circle.path.setAttribute('stroke-width', state.width);
                         var value = Math.round(circle.value() * 100);
                         if (value === 0) {
@@ -401,6 +406,7 @@
                         } else {
                             circle.setText('.' + value + '%');
                         }
+                        circle.text.style.color = '#003FFF';
                     }
                 });
             });
@@ -410,7 +416,7 @@
                 bar.animate({{ completed_count }}, {
                     duration: 1400,
                     step: function(state, circle) {
-                        circle.path.setAttribute('stroke', '#00FF00');  // Change color dynamically
+                        circle.path.setAttribute('stroke', '#003FFF');  // Change color dynamically
                         circle.path.setAttribute('stroke-width', state.width);
                         var value = Math.round(circle.value() * 100);
                         if (value === 0) {
@@ -418,204 +424,10 @@
                         } else {
                             circle.setText('.' + value + '%');
                         }
+                        circle.text.style.color = '#003FFF';
                     }
                 });
             });
         </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--         
-<script src="{% static 'js/radialMultiProgress.js' %}"></script>
-<script>
-    $(document).ready(function() {
-        var masters_approved = {{ masters_approved|safe }};
-        var masters_pending = {{ masters_pending|safe }};
-        var total_masters = {{ total_masters|safe }};
-
-        var article_submitted = 0;  
-        var article_opened = 0;     
-        var article_completed = 0;  
-
-        function initializeRadialProgress(approved, pending, total) {
-            console.log("Initializing radial progress with values:", approved, pending, total);
-            $("#multi").radialMultiProgress({
-                thickness: 10,
-                space: 0,
-                antiAlias: true,
-                scaleLabel: true,
-                data: [
-                    { id: 'approvedBar', color: "#FF3200", range: [0, total], value: approved },
-                    { id: 'pendingBar', color: "#00CC9B", range: [0, total], value: pending },
-                    { id: 'totalBar', color: "#003FFF", range: [0, total], value: total },
-                ]
-            });
-        }
-
-        function updateRadialProgress(approved, pending, total) {
-            console.log("Updating radial progress with values:", approved, pending, total);
-            var instance = $("#multi").data('radialMultiProgress');
-            if (instance) {
-                instance.update([
-                    { id: 'approvedBar', color: "#c5dba4", range: [0, total], value: approved },
-                    { id: 'pendingBar', color: "#91e67e", range: [0, total], value: pending },
-                    { id: 'totalBar', color: "#96f051", range: [0, total], value: total },
-                ]);
-            } else {
-                initializeRadialProgress(approved, pending, article_completed);
-            }
-        }
-
-        initializeRadialProgress(masters_approved, masters_pending, total_masters);     
-
-        $('#btn-master').click(function() {
-            $('#dynamic-content').html(`
-                <div id="dynamic-content" class="ring-container">
-                <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
-                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#FF3200"/>
-                    </svg>
-                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Approved Masters: ${masters_approved}</h4>
-                </div>
-                <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
-                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#00CC9B"/>
-                    </svg>
-                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Pending Requests: ${masters_pending}</h4>
-                </div>
-                <div style="display: flex; align-items: center;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
-                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#003FFF"/>
-                    </svg>
-                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Masters Registered: ${total_masters}</h4>
-                </div>
-            </div>
-            `);
-            updateRadialProgress(masters_approved, masters_pending, total_masters);
-        });
-
-        $('#btn-article').click(function() {
-            $.ajax({
-                url: '{% url "get_article_counts" %}',
-                method: 'GET',
-                success: function(data) {
-                    console.log("Received article data:", data);
-                  
-                    article_submitted = data.submitted_count;
-                    article_opened = data.open_count;
-                    article_completed = data.completed_count;
-                    
-                    console.log("Updated article counts:", article_submitted, article_opened, article_completed);
-
-                    $('#dynamic-content').html(`
-                        <div id="dynamic-content" class="ring-container">
-                <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
-                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#FF3200"/>
-                    </svg>
-                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Submitted Articles: ${article_submitted}</h4>
-                </div>
-                <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
-                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#00CC9B"/>
-                    </svg>
-                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Opened Articles: ${article_opened}</h4>
-                </div>
-                <div style="display: flex; align-items: center;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
-                        <circle id="Ellipse 11" cx="10.5" cy="10" r="10" fill="#003FFF"/>
-                    </svg>
-                    <h4 class="h4" style="color: #00A3FF; font-size: large; margin-left: 10px; font-family: sans-serif;">Completed Articles: ${article_completed}</h4>
-                </div>
-            </div>
-                    `);
-                    
-                    updateRadialProgress(article_submitted, article_opened, article_submitted + article_opened + article_completed);
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error fetching article data:", error);
-                }
-            });
-        });
-    });
-</script> -->
-
-
-
 </body>
 </html>

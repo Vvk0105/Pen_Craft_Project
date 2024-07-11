@@ -213,7 +213,7 @@
                         </div>
                         <div class="card-flximg">
                             {% if feedback.submission.user.userreg.image %}
-                            <img src="{{ feedback.submission.user.userreg.image.url }}" alt="Writer's Image">
+                            <img src="{{ feedback.submission.user.userreg.image.url }}" alt="Writer's Image" style="width: 200px; height: 176px; object-fit: cover; border-radius: 30px;">
                         {% else %}
                             <img src="{% static 'images/image.png' %}" alt="Default Image">
                         {% endif %}
