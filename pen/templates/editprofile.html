@@ -25,13 +25,19 @@
 <body>
     <div class="container mt-5">
         <div class="card">
-            
+            {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
             <div class="card-header d-flex justify-content-between align-items-center" style="background: #00518B; color: white;">
                 <h2>Edit Profile</h2>
                 <a href="{% url 'home' %}"><button class="btn-danger btn-sm" style="color: white;">✖</button></a>
             </div>
             <div class="card-body">
-                <form method="post" action="{% url 'edit_profile' %}" enctype="multipart/form-data">
+                <form method="post" action="{% url 'edit_profile' %}" enctype="multipart/form-data" onsubmit="return handleFormSubmit(event);">
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -45,8 +51,9 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="phone_number">Phone Number</label>
-                            <input type="tel" class="form-control" id="phone_number" name="phone_number" value="{{ user_reg.phone_number }}" required>
+                            <label for="id_phone_number" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="id_phone_number" name="phone_number" value="{{ user_reg.phone_number }}" maxlength="10" required>
+                                <div id="phone-error" class="invalid-feedback" style="display: none;">Phone number must be exactly 10 digits.</div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="qualification">Qualification</label>
@@ -92,5 +99,33 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            var alert = document.querySelector('.alert');
+            if (alert) {
+                setTimeout(function() {
+                    alert.style.opacity = 0;
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 600);
+                }, 2000);
+            }
+        });
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            var phoneNumber = document.getElementById('id_phone_number').value; 
+            if (phoneNumber.length !== 10 || !/^\d{10}$/.test(phoneNumber)) {
+                document.getElementById('phone-error').style.display = 'block';
+                return false;
+            } else {
+                document.getElementById('phone-error').style.display = 'none';
+            }
+            event.target.submit();
+
+        }
+    </script>
 </body>
 </html>

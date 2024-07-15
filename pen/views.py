@@ -716,7 +716,7 @@ def edit_profile(request):
             user_reg.image = image
             user_reg.save()
 
-            return redirect('home')
+            return redirect('profile')
         except Exception as e:
             return HttpResponse(f"Something went wrong: {e}")
 

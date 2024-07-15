@@ -113,7 +113,7 @@
                 <div class="sidebar">
                     {% for master in masters %}
                     <li class="flex-user-wrap">
-                        <img class="img-fluid" src="{{ master.img.url }}" alt="">
+                        <img class="img-fluid" src="{{ master.img.url }}" alt="" style=" object-fit: cover; border-radius: 30px;">
                         <a href="?master_id={{ master.id }}">{{ master.username }}</a>
                     </li>
                     {% endfor %}
@@ -128,7 +128,7 @@
                                 <path d="M21.4704 35.5508L10.6271 24.7156C10.4297 24.5095 10.2749 24.2664 10.1716 24.0003C9.95462 23.4726 9.9544 22.8806 10.171 22.3528C10.2741 22.0866 10.4287 21.8435 10.626 21.6372L21.4613 10.794C21.6633 10.5918 21.9032 10.4313 22.1673 10.3218C22.4313 10.2124 22.7143 10.1559 23.0002 10.1558C23.5775 10.1556 24.1312 10.3848 24.5396 10.7928C24.948 11.2009 25.1775 11.7545 25.1777 12.3318C25.1779 12.9091 24.9488 13.4628 24.5407 13.8712L17.3895 21.006L33.8434 21C34.4184 20.9997 34.9699 21.2279 35.3766 21.6343C35.7833 22.0407 36.0119 22.5921 36.0121 23.167C36.0123 23.742 35.7841 24.2934 35.3777 24.7001C34.9713 25.1068 34.42 25.3354 33.845 25.3357L17.3911 25.3417L24.5476 32.4713C24.7509 32.6728 24.9122 32.9125 25.0224 33.1766C25.1325 33.4407 25.1893 33.7241 25.1894 34.0102C25.1895 34.2964 25.133 34.5798 25.023 34.844C24.913 35.1082 24.7519 35.348 24.5487 35.5497C24.3473 35.7529 24.1076 35.9143 23.8435 36.0244C23.5793 36.1346 23.296 36.1914 23.0098 36.1915C22.7236 36.1916 22.4403 36.135 22.176 36.0251C21.9118 35.9151 21.672 35.7539 21.4704 35.5508Z" fill="#2D2D2D"/>
                             </svg>
                         </a>
-                        <img src="{{ selected_master.img.url }}" alt="" class="rounded-circle" style="width: 50px; height: 50px; margin-left: 60px;">
+                        <img src="{{ selected_master.img.url }}" alt="" class="rounded-circle" style="width: 50px; height: 50px; margin-left: 60px; object-fit: cover; border-radius: 30px;"">
                         <h3 class="chat-username" style="display: inline-block; margin-left: 5px; font-weight: 400; font-size: x-large;">{{ selected_master.username }}</h3>
                     </div>
                     <div style="padding: 15px 30px;">
